@@ -1,8 +1,8 @@
 #! bin/bash
 
 #loads functions into session
-. helper.sh
-. functions.sh
+. $DIR/helper.sh
+. $DIR/functions.sh
 
 ORI=$(pwd)
 

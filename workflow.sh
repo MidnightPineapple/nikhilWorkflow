@@ -1,7 +1,9 @@
 #! /bin/bash
 
+# Find program folder
+DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
 # Initializing Params and Helper Functions
-. init.sh
+. $DIR/init.sh
 
 mkdir $P_DIR/logs
 echo '';
