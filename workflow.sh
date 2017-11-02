@@ -74,6 +74,6 @@ formatStringArray B_COUNTS GROUP_B $P_DIR"/results/counts/" ".count.txt"; B_COUN
 A_COUNTS_PATHS=$(joinBy , "${A_COUNTS[@]}")
 B_COUNTS_PATHS=$(joinBy , "${B_COUNTS[@]}")
 
-Rscript --vanilla limmavoom.R "$P_DIR/results/voom" "$A_COUNTS_PATHS" "$B_COUNTS_PATHS" "$GA" > logs/voom.log.out
+Rscript --vanilla $DIR/limmavoom.R "$P_DIR/results/voom" "$A_COUNTS_PATHS" "$B_COUNTS_PATHS" "$GA" > logs/voom.log.out
 echo 'ALL DONE!'
 } &> logs/log.out &

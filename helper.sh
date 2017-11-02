@@ -23,6 +23,7 @@ getFile() {
     eval $__outVar="'$FILE'"
 }
 #FIXME: If user submits more than 1 file at once, it won't care if the file actually exists!
+#FIXME: If user puts in something other than y or n, it will treat it as a yes and no more chances to answer yn prob b/c it encounters getFile first.
 getFileArray() {
     local __outVar=$1;
     local ARRAY=();
