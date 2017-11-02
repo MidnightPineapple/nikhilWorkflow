@@ -1,5 +1,8 @@
 #! bin/bash
 
+# Find program folder
+DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
+
 #loads functions into session
 . $DIR/helper.sh
 . $DIR/functions.sh
