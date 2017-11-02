@@ -34,9 +34,9 @@ genStarGenome() {
     --runMode genomeGenerate                \
     --genomeFastaFiles $REF_GENOME          \
     --genomeDir STARgenome                  \
-    --sjdbGTFfile $GTF                      \
-    --sjdbOverhang 33                       ; 
+    --sjdbGTFfile $GTF                      ;
 }
+#    --sjdbOverhang 33
 
 star1() {
     #requires $starGenome $FASTQ_DIR defined
@@ -60,7 +60,8 @@ star2() {
     --outSAMunmapped Within                                 \
     --outSAMtype BAM SortedByCoordinate                     \
     --sjdbFileChrStartEnd ${sjdbFiles[@]}                   \
-    --sjdbGTFfile $GTF                                      ;
+    --sjdbGTFfile $GTF                                      \
+    --outFilterType BySJout                                 ;
 }
 
 picard() {
