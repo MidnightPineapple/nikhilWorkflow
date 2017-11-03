@@ -16,55 +16,55 @@ echo 'then it will continue running after log out';
 # Make sure we're in the project directory before we actually start working...
 cd $P_DIR
 
-echo 'STARTING PRETRIMQC'
+echo $(date): 'STARTING PRETRIMQC'
 mkdir results
 mkdir results/preTrimQC
 loopThru GROUP_ALL pretrim > logs/preTrimQC.log.out
-echo 'FINISHED PRETRIMQC'
+echo $(date): 'FINISHED PRETRIMQC'
 
-echo "STARTING TRIMMOMATIC WITH COMMAND HEADCROP 13"
+echo $(date): "STARTING TRIMMOMATIC WITH COMMAND HEADCROP 13"
 loopThru GROUP_ALL trim > logs/trim.log.out
-echo "FINISHED TRIMMING"
+echo $(date): "FINISHED TRIMMING"
 
-echo 'STARTING POSTTRIMQC'
+echo $(date): 'STARTING POSTTRIMQC'
 mkdir results/postTrimQC
 loopThru GROUP_ALL posttrim > logs/postTrimQC.log.out
-echo 'FINISHED POSTTRIMQC'
+echo $(date): 'FINISHED POSTTRIMQC'
 
 if [ ! -d $starGenome ]; then 
-    echo 'MAKING STARGENOME'
+    echo $(date): 'MAKING STARGENOME'
     mkdir STARgenome
     starGenome=$P_DIR/STARgenome
     genStarGenome > logs/genStarGenome.log.out
 else
-    echo "STARGENOME REFERENCE PROVIDED, SKIPPING STARGENOME CREATION"
+    echo $(date): "STARGENOME REFERENCE PROVIDED, SKIPPING STARGENOME CREATION"
 fi
 
-echo 'RUNNING STAR PASS 1'
+echo $(date): 'RUNNING STAR PASS 1'
 mkdir results/STARp1
 loopThru GROUP_ALL star1 > logs/STARp1.log.out
-echo 'FINISHED STAR P1'
+echo $(date): 'FINISHED STAR P1'
 
 #makes array of all sjdb files
 formatStringArray sjdbFileString GROUP_ALL "results/STARp1/" ".trim.SJ.out.tab"
 sjdbFiles=($sjdbFileString)
 
-echo 'RUNNING STAR P2'
+echo $(date): 'RUNNING STAR P2'
 mkdir results/STARp2
 loopThru GROUP_ALL star2 > logs/STARp2.log.out
-echo 'FINISHED STAR P2'
+echo $(date): 'FINISHED STAR P2'
 
-echo 'RUNNING PICARD' 
+echo $(date): 'RUNNING PICARD'
 mkdir results/bam_drem
 loopThru GROUP_ALL picard > logs/picard.log.out
-echo 'FINISHED PICARD'
+echo $(date): 'FINISHED PICARD'
 
-echo 'SUBREAD FEATURECOUNTS'
+echo $(date): 'SUBREAD FEATURECOUNTS'
 mkdir results/counts
 loopThru GROUP_ALL subread > logs/subread.log.out
-echo 'FINISHED FEATURECOUNTS'
+echo $(date): 'FINISHED FEATURECOUNTS'
 
-echo 'LIMMA VOOM ANALYSIS'
+echo $(date): 'LIMMA VOOM ANALYSIS'
 mkdir results/voom
 module add R
 export R_LIBS=$P_DIR"/bin/R_libs/" #adds R_LIBS path as an environment variable
@@ -75,5 +75,5 @@ A_COUNTS_PATHS=$(joinBy , "${A_COUNTS[@]}")
 B_COUNTS_PATHS=$(joinBy , "${B_COUNTS[@]}")
 
 Rscript --vanilla $DIR/limmavoom.R "$P_DIR/results/voom" "$A_COUNTS_PATHS" "$B_COUNTS_PATHS" "$GA" > logs/voom.log.out
-echo 'ALL DONE!'
+echo $(date): 'ALL DONE!'
 } &> logs/log.out &
