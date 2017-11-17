@@ -4,8 +4,8 @@
 DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
 
 #loads functions into session
-. $DIR/helper.sh
-. $DIR/functions.sh
+. "$DIR"/helper.sh
+. "$DIR"/functions.sh
 
 ORI=$(pwd)
 
@@ -15,8 +15,8 @@ echo "The tools necessary for this workflow should be installed within the scope
 echo "A results folder and a log folder will be created in this directory"
 getDir P_DIR
 
-dirExists $P_DIR logs
-dirExists $P_DIR results
+dirExists "$P_DIR" logs
+dirExists "$P_DIR" results
 
 # ask if they have a starGenome already; if so ask for stargenome directory
 while true; do

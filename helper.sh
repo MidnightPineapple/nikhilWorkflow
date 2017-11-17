@@ -73,14 +73,15 @@ loopThru() {
 dirExists() {
   local DIR=$1
   local CHK=$2
-  while [ -d "$DIR" ]; do
-    if [ -d "$DIR"/"$CHK" ]; then
+  while true; do
+    if [[ -d $DIR/$CHK ]]; then
       read -p "The $CHK folder already exists. Would you like to overwrite it? " yn
       case $yn in
         [Yy1]* ) rm -rf "$DIR"/"$CHK"; break;;
         [Nn0]* ) echo "Files will be added to the $CHK folder"; break;;
         * ) echo "Please answer yes or no. ";;
       esac
+    else break;
     fi
   done
 }
