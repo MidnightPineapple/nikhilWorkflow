@@ -10,11 +10,18 @@ DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
 ORI=$(pwd)
 
 #Get into project directory
+echo
 echo "Please input project directory."
 echo "The tools necessary for this workflow should be installed within the scope of this directory"
 echo "A results folder and a log folder will be created in this directory"
 getDir P_DIR
 
+if [[ ! -d $P_DIR/bin ]]; then
+  echo "Please make sure the tools for this workflow are installed in the scope of this the project directory";
+  exit;
+fi
+
+# checks if logs and results folders already exist and if so asks whether or not to replace
 dirExists "$P_DIR" logs
 dirExists "$P_DIR" results
 
