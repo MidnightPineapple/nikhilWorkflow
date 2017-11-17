@@ -5,7 +5,7 @@
 getDir() {
     local __outVar=$1;
     local DIR=0;
-    while [ ! -d $DIR ]; do 
+    while [ ! -d $DIR ]; do
         read -p "" DIR;
         if [ ! -d $DIR ]; then echo "Directory does not exist. Please try again. "; fi;
     done;
@@ -16,7 +16,7 @@ getDir() {
 getFile() {
     local __outVar=$1;
     local FILE=0;
-    while [ ! -f $FILE ]; do 
+    while [ ! -f $FILE ]; do
         read -p "" FILE;
         if [ ! -f $FILE ]; then echo "File does not exist. Please try again. "; fi;
     done;
@@ -31,13 +31,13 @@ getFileArray() {
         getFile newFile
         ARRAY=("${ARRAY[@]}" $newFile)
         read -p "Do you have more files? " yn
-        case $yn in 
+        case $yn in
             [Yy1]* ) echo "Please input next filename. ";;
             [Nn0]* ) break;;
             * ) echo "Please answer yes or no. ";;
         esac
     done
-    eval $__outVar="'${ARRAY[@]}'" 
+    eval $__outVar="'${ARRAY[@]}'"
 }
 
 formatStringArray() {
@@ -63,9 +63,24 @@ loopThru() {
     local ARRAY_NAME=$1[@];
     local ARRAY=("${!ARRAY_NAME}")
     local COUNTER=0;
-    while [ $COUNTER -lt ${#ARRAY[@]} ]; do 
-        echo "Performing operation iteration number `expr $COUNTER + 1`";        
+    while [ $COUNTER -lt ${#ARRAY[@]} ]; do
+        echo "Performing operation iteration number `expr $COUNTER + 1`";
         "$2" "${ARRAY[$COUNTER]}";
         let COUNTER=COUNTER+1;
     done;
+}
+
+dirExists() {
+  local DIR=$1
+  local CHK=$2
+  while [ -d "$DIR" ]; do
+    if [ -d "$DIR"/"$CHK" ]; then
+      read -p "The $CHK folder already exists. Would you like to overwrite it? " yn
+      case $yn in
+        [Yy1]* ) rm -rf "$DIR"/"$CHK"; break;;
+        [Nn0]* ) echo "Files will be added to the $CHK folder"; break;;
+        * ) echo "Please answer yes or no. ";;
+      esac
+    fi
+  done
 }
