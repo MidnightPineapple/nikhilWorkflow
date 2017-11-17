@@ -11,6 +11,8 @@ ORI=$(pwd)
 
 #Get into project directory
 echo "Please input project directory."
+echo "The tools necessary for this workflow should be installed within the scope of this directory"
+echo "A results folder and a log folder will be created in this directory"
 getDir P_DIR
 
 # ask if they have a starGenome already; if so ask for stargenome directory
@@ -24,14 +26,14 @@ while true; do
 done
 
 # get reference genome path and gtf file path
-if [ ! -d $starGenome ]; then 
-    echo "Please input path to reference genome .fasta file."; 
+if [ ! -d $starGenome ]; then
+    echo "Please input path to reference genome .fasta file.";
     getFile REF_GENOME; REF_GENOME=$(readlink -e $REF_GENOME);
 fi;
-echo "Please input path to GTF file."; 
+echo "Please input path to GTF file.";
 getFile GTF; GTF=$(readlink -e $GTF);
 # get gene associations file path
-echo "Please input path to gene associations file."; 
+echo "Please input path to gene associations file.";
 getFile GA; GA=$(readlink -e $GA);
 
 # get fastq folder path
