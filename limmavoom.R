@@ -119,7 +119,7 @@ write.csv(results, paste(filePrefix,'_','all.csv', sep=""))
 save.image("image.RData")
 
 ##----- Keep only results with FDR above threshold ------
-sig = all[which(all$adj.P.Val<MaxFDR),]
+sig = results[which(results$adj.P.Val<MaxFDR),]
 
 ##----- Keep only results with fold change above threshold
 up = sig[which(sig$FC< (-1*MinAbsFC)),]
