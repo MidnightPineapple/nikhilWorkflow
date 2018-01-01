@@ -1,4 +1,4 @@
-LOGS#! /bin/bash
+#! /bin/bash
 
 # clears the console
 clear
@@ -102,4 +102,4 @@ fi
 
 echo $(date): "ALL DONE!"
 
-} &> "$logs"/log.out &
+} &> "$LOGS"/log.out &

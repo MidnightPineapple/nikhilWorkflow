@@ -58,8 +58,8 @@ GROUP_ALL=(${GROUP_A[@]} ${GROUP_B[@]})
 
 # make results and log folder names particular to this run
 # c=$(echo $b | tr -cd [a-z0-9\-\_])
-LOGS="$( echo "$GROUP_A_NAME-$GROUP_A_NAME"_logs | tr -cd [a-z0-9\-\_])"
-RESULTS="$( echo "$GROUP_A_NAME-$GROUP_A_NAME"_results | tr -cd [a-z0-9\-\_])"
+LOGS="$( echo "$GROUP_A_NAME-$GROUP_B_NAME"_logs | tr -cd [a-z0-9\-\_])"
+RESULTS="$( echo "$GROUP_A_NAME-$GROUP_B_NAME"_results | tr -cd [a-z0-9\-\_])"
 
 # checks if logs and results folders already exist and if so asks whether or not to replace
 dirExists "$P_DIR" "$LOGS"
