@@ -1,4 +1,4 @@
-#! /bin/bash
+LOGS#! /bin/bash
 
 # clears the console
 clear
@@ -20,10 +20,10 @@ DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
 # Initializing Params and Helper Functions
 . "$DIR"/init.sh
 
-mkdir "$P_DIR"/logs
+mkdir "$P_DIR"/"$LOGS"
 echo
 echo "Workflow starting in background with PID: ${$}";
-echo 'Logs will be stored in logs/log.txt';
+echo "Logs will be stored in $LOGS/log.txt";
 echo 'If this script was started using the bash function';
 echo 'then it will continue running after log out';
 ######################### START WORKFLOW ############################
@@ -32,63 +32,74 @@ echo 'then it will continue running after log out';
 cd "$P_DIR"
 
 echo $(date): 'STARTING PRETRIMQC'
-mkdir results
-mkdir results/preTrimQC
-loopThru GROUP_ALL pretrim > logs/preTrimQC.log.out
+mkdir "$RESULTS"
+mkdir "$RESULTS"/preTrimQC
+loopThru GROUP_ALL pretrim > "$LOGS"/preTrimQC.log.out
 echo $(date): 'FINISHED PRETRIMQC'
 
 echo $(date): "STARTING TRIMMOMATIC WITH COMMAND HEADCROP 13"
-loopThru GROUP_ALL trim > logs/trim.log.out
+mkdir "$RESULTS"/trim
+loopThru GROUP_ALL trim > "$LOGS"/trim.log.out
 echo $(date): "FINISHED TRIMMING"
 
 echo $(date): 'STARTING POSTTRIMQC'
-mkdir results/postTrimQC
-loopThru GROUP_ALL posttrim > logs/postTrimQC.log.out
+mkdir "$RESULTS"/postTrimQC
+loopThru GROUP_ALL posttrim > "$LOGS"/postTrimQC.log.out
 echo $(date): 'FINISHED POSTTRIMQC'
 
 if [[ ! -d $starGenome ]]; then
     echo $(date): 'MAKING STARGENOME'
     mkdir STARgenome
     starGenome="$P_DIR"/STARgenome
-    genStarGenome > logs/genStarGenome.log.out
+    genStarGenome > "$LOGS"/genStarGenome.log.out
 else
     echo $(date): "STARGENOME REFERENCE PROVIDED, SKIPPING STARGENOME CREATION"
 fi
 
 echo $(date): 'RUNNING STAR PASS 1'
-mkdir results/STARp1
-loopThru GROUP_ALL star1 > logs/STARp1.log.out
+mkdir "$RESULTS"/STARp1
+loopThru GROUP_ALL star1 > "$LOGS"/STARp1.log.out
 echo $(date): 'FINISHED STAR P1'
 
 #makes array of all sjdb files
-formatStringArray sjdbFileString GROUP_ALL "results/STARp1/" ".trim.SJ.out.tab"
+formatStringArray sjdbFileString GROUP_ALL "$RESULTS/STARp1/" ".trim.SJ.out.tab"
 sjdbFiles=($sjdbFileString)
 
 echo $(date): 'RUNNING STAR P2'
-mkdir results/STARp2
-loopThru GROUP_ALL star2 > logs/STARp2.log.out
+mkdir "$RESULTS"/STARp2
+loopThru GROUP_ALL star2 > "$LOGS"/STARp2.log.out
 echo $(date): 'FINISHED STAR P2'
 
 echo $(date): 'RUNNING PICARD'
-mkdir results/bam_drem
-loopThru GROUP_ALL picard > logs/picard.log.out
+mkdir "$RESULTS"/bam_drem
+loopThru GROUP_ALL picard > "$LOGS"/picard.log.out
 echo $(date): 'FINISHED PICARD'
 
 echo $(date): 'SUBREAD FEATURECOUNTS'
-mkdir results/counts
-loopThru GROUP_ALL subread > logs/subread.log.out
+mkdir "$RESULTS"/counts
+loopThru GROUP_ALL subread > "$LOGS"/subread.log.out
 echo $(date): 'FINISHED FEATURECOUNTS'
 
 echo $(date): 'LIMMA VOOM ANALYSIS'
-mkdir results/voom
+mkdir "$RESULTS"/voom
 module add R
 export R_LIBS="$P_DIR/bin/R_libs/" #adds R_LIBS path as an environment variable
 
-formatStringArray A_COUNTS GROUP_A "$P_DIR/results/counts/" ".count.txt"; A_COUNTS=($A_COUNTS)
-formatStringArray B_COUNTS GROUP_B "$P_DIR/results/counts/" ".count.txt"; B_COUNTS=($B_COUNTS)
+formatStringArray A_COUNTS GROUP_A "$P_DIR/$RESULTS/counts/" ".count.txt"; A_COUNTS=($A_COUNTS)
+formatStringArray B_COUNTS GROUP_B "$P_DIR/$RESULTS/counts/" ".count.txt"; B_COUNTS=($B_COUNTS)
 A_COUNTS_PATHS=$(joinBy , "${A_COUNTS[@]}")
 B_COUNTS_PATHS=$(joinBy , "${B_COUNTS[@]}")
 
-Rscript --vanilla "$DIR"/limmavoom.R "$P_DIR/results/voom" "$A_COUNTS_PATHS" "$B_COUNTS_PATHS" "$GA" > logs/voom.log.out
-echo $(date): 'ALL DONE!'
-} &> logs/log.out &
+Rscript --vanilla "$DIR"/limmavoom.R "$P_DIR/$RESULTS/voom" "$A_COUNTS_PATHS" "$B_COUNTS_PATHS" "$GA" "$GROUP_A_NAME" "$GROUP_B_NAME" > "$LOGS"/voom.log.out
+echo $(date): "Final results in $P_DIR/$RESULTS/voom"
+
+# removes intermediate results files if we want to reset
+if [ "$RESET" = true ]; then
+  echo $(date): "Deleting intermediate files and folders in $P_DIR/$RESULTS"
+  # IDEA: make a new make directory function within helper and keep track of the creation of each new results folder in an array so its more elegant
+  rm -rf "$RESULTS"/preTrimQC "$RESULTS"/trim "$RESULTS"/postTrimQC "$RESULTS"/STARp1 "$RESULTS"/STARp2 "$RESULTS"/bam_drem "$RESULTS"/counts
+fi
+
+echo $(date): "ALL DONE!"
+
+} &> "$logs"/log.out &

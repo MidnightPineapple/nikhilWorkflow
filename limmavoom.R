@@ -1,6 +1,6 @@
 #!/usr/local/apps/R/gcc_4.9.1/3.2.3/bin/Rscript
 
-#if you don't have limma installed, install it. 
+#if you don't have limma installed, install it.
 if(!require('limma')) {
   source("https://bioconductor.org/biocLite.R")
   biocLite("limma")
@@ -9,45 +9,50 @@ if(!require('edgeR')) {
   install.packages('edgeR')
 }
 
-# Get Args # RScript --vanilla WD GroupAFiles GroupBFiles Associations
-args = commandArgs(trailingOnly=TRUE) 
+# Get Args # RScript --vanilla WD GroupAFiles GroupBFiles Associations GroupAName GroupBName
+args = commandArgs(trailingOnly=TRUE)
 
-if(length(args)!=4) stop("Faulty Arguments Supplied")
+if(length(args)!=6) stop("Faulty Arguments Supplied\nPlease use the following syntax:\n
+RScript --vanilla [YourScript.R] WD GroupAFiles GroupBFiles Associations GroupAName GroupBName
+\n Files are comma delimited.")
 
 #set wd
 WD = args[1]
 setwd(WD)
 
-'Executing command with args:'
-paste('Working Directory',args[1])
-paste('Group A:',args[2])
-paste('Group B:',args[3])
-paste('Gene Associations File:',args[4])
+writeLines('Executing command with args:')
+writeLines(paste('\tWorking Directory:',args[1]))
+writeLines(paste('\tGroup ',args[5],':',args[2]))
+writeLines(paste('\tGroup ',args[6],':',args[3]))
+writeLines(paste('\tGene Associations File:',args[4]))
 
 
-getCountsMatrix = function(groupFiles,groupName){ 
+getCountsMatrix = function(groupFiles,groupName){
   #this function reads the bash input for file paths and puts counts data into one counts matrix
   sepGroupFiles = unlist(strsplit(groupFiles, ","))
   group = list()
   for(i in 1:length(sepGroupFiles)) {
     group[[i]] = read.table(sepGroupFiles[i], header=TRUE, sep="\t")
     # Rename counts column to clearly reflect sample name
-    names(group[[i]])[7] = paste(groupName, i, sep="")
+    names(group[[i]])[7] = paste(groupName, i, sep=" ")
   }
   # Merge all count data into a counts matrix
   for(i in c(1:length(group))[-2]){
-    if(i == 1) { 
-      CountMatrix = merge(group[[i]][,c("Geneid", paste(groupName, i, sep=""))], group[[i+1]][,c("Geneid", paste(groupName, i+1, sep=""))], by ="Geneid")
+    if(i == 1) {
+      CountMatrix = merge(group[[i]][,c("Geneid", paste(groupName, i, sep=" "))], group[[i+1]][,c("Geneid", paste(groupName, i+1, sep=" "))], by ="Geneid")
     }
-    else {CountMatrix = merge(CountMatrix, group[[i]][,c("Geneid", paste(groupName, i, sep=""))], by ="Geneid")}
+    else {CountMatrix = merge(CountMatrix, group[[i]][,c("Geneid", paste(groupName, i, sep=" "))], by ="Geneid")}
   }
   CountMatrix = cbind(CountMatrix, group[[1]][6])
   return(CountMatrix)
 }
 
 #runs the getCountsMatrix function for both groups, using args
-groupA = getCountsMatrix(args[2], "A")
-groupB = getCountsMatrix(args[3], "B")
+groupAName = args[5]
+groupBName = args[6]
+filePrefix = paste(gsub("[[:punct:] ]+", "",groupAName),'-',gsub("[[:punct:] ]+", "",groupBName))
+groupA = getCountsMatrix(args[2], groupAName)
+groupB = getCountsMatrix(args[3], groupBName)
 counts = merge(groupA, groupB, by=c("Geneid","Length"))
 groupASampleCount = ncol(groupA) - 2
 groupBSampleCount = ncol(groupB) - 2
@@ -55,9 +60,9 @@ groupBSampleCount = ncol(groupB) - 2
 row.names(counts) = counts[,1]
 counts = counts[,-1]
 #writes it to the working directory
-write.csv(counts,'counts.csv')
+write.csv(counts, paste(filePrefix,'_','counts.csv', sep=""))
 
-#split up counts and gene length data 
+#split up counts and gene length data
 length = counts[,1]
 counts = counts[,2:length(counts)]
 
@@ -71,22 +76,22 @@ associations$V11 = sapply(strsplit(associations$V11, "\\|"), function(v) v[1])
 
 #counts <- read.csv("counts.csv",header=T,stringsAsFactors=F,row.names=1) #not necessary since created earlier
 filtered_counts <- counts[apply(counts, 1, function(x) any(x>0)),]
-group = factor(c(rep("A",groupASampleCount),rep("B",groupBSampleCount))) 
+group = factor(c(rep("A",groupASampleCount),rep("B",groupBSampleCount)))
 design = model.matrix(~0+group)
 colnames(design) <- levels(group)
 
 #put MV trend graph in a pdf
-pdf('voom.pdf')
+pdf(paste(filePrefix,'_','voom.pdf', sep=""))
 v = voom(as.matrix(filtered_counts), design, plot=TRUE, normalize="quantile")
 dev.off()
 
 fit <- lmFit(v,design)
-contrast.matrix <- makeContrasts(contrasts="A-B",levels=design) 
+contrast.matrix <- makeContrasts(contrasts="A-B",levels=design)
 fit <- contrasts.fit(fit, contrast.matrix)
 ebayes.fit=eBayes(fit)
 results = topTable(ebayes.fit, coef="A-B", number=nrow(ebayes.fit))
 results$FC <- ifelse(results$logFC<0, -1/(2^results$logFC), 2^results$logFC)
-write.csv(results, 'voom_res.csv')
+write.csv(results, paste(filePrefix,'_','voom.csv', sep=""))
 
 
 ##----- Get GO Associations ----
@@ -102,9 +107,22 @@ results=cbind(results, GO_Enrichment = GO_all)
 ##----- Get RPKM ------------
 
 RPKM = rpkm(counts, length, log=FALSE, normalized.lib.sizes=TRUE)
-write.csv(RPKM,'rpkm.csv')
+write.csv(RPKM, paste(filePrefix,'_','rpkm.csv', sep=""))
 results = cbind(RPKM[match(rownames(results), rownames(RPKM)),1:ncol(RPKM)],results)
 
-##----- Done, print results csv ----
-write.csv(results, 'results.csv')
-save.image("image.RData")
+##----- Print all_res ----
+write.csv(results, paste(filePrefix,'_','all.csv', sep=""))
+
+##----- Keep only results with FDR above threshold ------
+sig = all[which(all$adj.P.Val<=.1),]
+
+##----- Keep only results with fold change above threshold
+up = sig[which(sig$FC< (-1*2)),]
+dn = sig[which(sig$FC> 2),]
+
+##----- Print significantly upregulated and downregulated results -------
+write.csv(up, paste(filePrefix,'_','up.csv', sep=""))
+write.csv(dn, paste(filePrefix,'_','dn.csv', sep=""))
+
+##----- Save the workspace image in case we need to troubleshoot later -------
+save.image(paste(filePrefix,'_',"image.RData", sep=""))

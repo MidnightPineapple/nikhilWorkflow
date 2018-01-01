@@ -7,7 +7,7 @@ pretrim() {
     local currentFile=$1;
     bin/FastQC/fastqc           \
     $FASTQ_DIR/$currentFile     \
-    --outdir=results/preTrimQC/ ;
+    --outdir="$RESULTS"/preTrimQC/ ;
 }
 
 trim() {
@@ -16,16 +16,16 @@ trim() {
     java -jar bin/Trimmomatic-0.36/trimmomatic-0.36.jar     \
     SE                                                      \
     $FASTQ_DIR/$currentFile                                 \
-    $FASTQ_DIR/$currentFile.trim                            \
+    "$RESULTS"/trim/$currentFile.trim                            \
     HEADCROP:13                                             ;
 }
 
 posttrim() {
     #req $FASTQ_DIR
     local currentFile=$1;
-    bin/FastQC/fastqc               \
-    $FASTQ_DIR/$currentFile.trim    \
-    --outdir=results/postTrimQC/    ;
+    bin/FastQC/fastqc                    \
+    "$RESULTS"/trim/$currentFile.trim    \
+    --outdir="$RESULTS"/postTrimQC/    ;
 }
 
 genStarGenome() {
@@ -44,8 +44,8 @@ star1() {
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
     --genomeDir $starGenome                                 \
     --alignIntronMax 10000                                  \
-    --readFilesIn $FASTQ_DIR/$currentFile.trim              \
-    --outFileNamePrefix results/STARp1/$currentFile.trim.   \
+    --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
+    --outFileNamePrefix "$RESULTS"/STARp1/$currentFile.trim.  \
     --outSAMtype BAM Unsorted                               ;
 }
 
@@ -55,8 +55,8 @@ star2() {
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
     --genomeDir $starGenome                                 \
     --alignIntronMax 10000                                  \
-    --readFilesIn $FASTQ_DIR/$currentFile.trim              \
-    --outFileNamePrefix results/STARp2/$currentFile.trim.   \
+    --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
+    --outFileNamePrefix "$RESULTS"/STARp2/$currentFile.trim.   \
     --outSAMunmapped Within                                 \
     --outSAMtype BAM SortedByCoordinate                     \
     --sjdbFileChrStartEnd ${sjdbFiles[@]}                   \
@@ -68,9 +68,9 @@ picard() {
     local currentFile=$1;
     java -jar bin/picard.jar                                            \
     MarkDuplicates                                                      \
-    I=results/STARp2/$currentFile.trim.Aligned.sortedByCoord.out.bam    \
-    O=results/bam_drem/$currentFile.bam                                 \
-    M=results/bam_drem/$currentFile.metrics.txt                         \
+    I="$RESULTS"/STARp2/$currentFile.trim.Aligned.sortedByCoord.out.bam    \
+    O="$RESULTS"/bam_drem/$currentFile.bam                                 \
+    M="$RESULTS"/bam_drem/$currentFile.metrics.txt                         \
     REMOVE_DUPLICATES=true                                              \
     CREATE_INDEX=true                                                   ;
 }
@@ -84,6 +84,6 @@ subread() {
     -s 0                                        \
     -t exon                                     \
     -a $GTF                                     \
-    -o results/counts/$currentFile.count.txt    \
-    results/bam_drem/$currentFile.bam           ;
+    -o "$RESULTS"/counts/$currentFile.count.txt    \
+    "$RESULTS"/bam_drem/$currentFile.bam           ;
 }
