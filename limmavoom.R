@@ -9,6 +9,10 @@ if(!require('edgeR')) {
   install.packages('edgeR')
 }
 
+# Set threshold FDR and FC values!
+MaxFDR = .1
+MinAbsFC = 2
+
 # Get Args # RScript --vanilla WD GroupAFiles GroupBFiles Associations GroupAName GroupBName
 args = commandArgs(trailingOnly=TRUE)
 
@@ -114,11 +118,11 @@ results = cbind(RPKM[match(rownames(results), rownames(RPKM)),1:ncol(RPKM)],resu
 write.csv(results, paste(filePrefix,'_','all.csv', sep=""))
 
 ##----- Keep only results with FDR above threshold ------
-sig = all[which(all$adj.P.Val<=.1),]
+sig = all[which(all$adj.P.Val<MaxFDR),]
 
 ##----- Keep only results with fold change above threshold
-up = sig[which(sig$FC< (-1*2)),]
-dn = sig[which(sig$FC> 2),]
+up = sig[which(sig$FC< (-1*MinAbsFC)),]
+dn = sig[which(sig$FC> MinAbsFC),]
 
 ##----- Print significantly upregulated and downregulated results -------
 write.csv(up, paste(filePrefix,'_','up.csv', sep=""))
