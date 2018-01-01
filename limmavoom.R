@@ -54,7 +54,7 @@ getCountsMatrix = function(groupFiles,groupName){
 #runs the getCountsMatrix function for both groups, using args
 groupAName = args[5]
 groupBName = args[6]
-filePrefix = paste(gsub("[[:punct:] ]+", "",groupAName),'-',gsub("[[:punct:] ]+", "",groupBName))
+filePrefix = paste(gsub("[[:punct:] ]+", "",groupAName),'-',gsub("[[:punct:] ]+", "",groupBName), sep="")
 groupA = getCountsMatrix(args[2], groupAName)
 groupB = getCountsMatrix(args[3], groupBName)
 counts = merge(groupA, groupB, by=c("Geneid","Length"))
@@ -116,6 +116,7 @@ results = cbind(RPKM[match(rownames(results), rownames(RPKM)),1:ncol(RPKM)],resu
 
 ##----- Print all_res ----
 write.csv(results, paste(filePrefix,'_','all.csv', sep=""))
+save.image("image.RData")
 
 ##----- Keep only results with FDR above threshold ------
 sig = all[which(all$adj.P.Val<MaxFDR),]
