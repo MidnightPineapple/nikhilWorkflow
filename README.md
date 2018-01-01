@@ -1,9 +1,9 @@
-#Differential Expression Analysis Workflow        
+# Differential Expression Analysis Workflow        
 *By Nikhil Gowda & Sam Chen*
 
 ---
 
-##This workflow utilizes the following versions of each tool:
+### This workflow utilizes the following versions of each tool:
  - FastQC v0.11.5                                           
  - Trimmomatic-0.36                                         
  - STAR-2.5.2b                                              
@@ -14,7 +14,7 @@
 
 ---
 
-##This workflow utilizes the following reference files:      
+### This workflow utilizes the following reference files:      
  - Reference Genome in fasta format                         
  - Genome Annotations File in gtf format                    
  - Gene Associations File in GAF2.0 format                  
