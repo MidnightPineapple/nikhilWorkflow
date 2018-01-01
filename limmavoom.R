@@ -116,7 +116,6 @@ results = cbind(RPKM[match(rownames(results), rownames(RPKM)),1:ncol(RPKM)],resu
 
 ##----- Print all_res ----
 write.csv(results, paste(filePrefix,'_','all.csv', sep=""))
-save.image("image.RData")
 
 ##----- Keep only results with FDR above threshold ------
 sig = results[which(results$adj.P.Val<MaxFDR),]
