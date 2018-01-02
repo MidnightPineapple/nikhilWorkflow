@@ -16,7 +16,7 @@ trim() {
     java -jar bin/Trimmomatic-0.36/trimmomatic-0.36.jar     \
     SE                                                      \
     $FASTQ_DIR/$currentFile                                 \
-    "$RESULTS"/trim/$currentFile.trim                            \
+    "$RESULTS"/trim/$currentFile.trim                       \
     HEADCROP:13                                             ;
 }
 
@@ -43,7 +43,7 @@ star1() {
     local currentFile=$1;
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
     --genomeDir $starGenome                                 \
-    --alignIntronMax 10000                                  \
+    --alignIntronMax 5000                                   \
     --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
     --outFileNamePrefix "$RESULTS"/STARp1/$currentFile.trim.  \
     --outSAMtype BAM Unsorted                               ;
@@ -54,7 +54,7 @@ star2() {
     local currentFile=$1;
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
     --genomeDir $starGenome                                 \
-    --alignIntronMax 10000                                  \
+    --alignIntronMax 5000                                   \
     --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
     --outFileNamePrefix "$RESULTS"/STARp2/$currentFile.trim.   \
     --outSAMunmapped Within                                 \
