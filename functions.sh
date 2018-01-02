@@ -34,34 +34,34 @@ genStarGenome() {
     --runMode genomeGenerate                \
     --genomeFastaFiles $REF_GENOME          \
     --genomeDir STARgenome                  \
-    --sjdbGTFfile $GTF                      ;
+    --sjdbGTFfile $GTF                      \
+    --sjdbOverhang 33                       ;
 }
-#    --sjdbOverhang 33
 
 star1() {
     #requires $starGenome $FASTQ_DIR defined
     local currentFile=$1;
-    bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
-    --genomeDir $starGenome                                 \
-    --alignIntronMax 5000                                   \
-    --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
-    --outFileNamePrefix "$RESULTS"/STARp1/$currentFile.trim.  \
-    --outSAMtype BAM Unsorted                               ;
+    bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                      \
+    --genomeDir $starGenome                                    \
+    --alignIntronMax 10000                                     \
+    --readFilesIn "$RESULTS"/trim/$currentFile.trim            \
+    --outFileNamePrefix "$RESULTS"/STARp1/$currentFile.trim.   \
+    --outSAMtype BAM Unsorted                                  ;
 }
 
 star2() {
     #requires $starGenome $FASTQ_DIR $sjdbfiles $GTF defined
     local currentFile=$1;
-    bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                   \
-    --genomeDir $starGenome                                 \
-    --alignIntronMax 5000                                   \
-    --readFilesIn "$RESULTS"/trim/$currentFile.trim         \
+    bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                      \
+    --genomeDir $starGenome                                    \
+    --alignIntronMax 10000                                     \
+    --readFilesIn "$RESULTS"/trim/$currentFile.trim            \
     --outFileNamePrefix "$RESULTS"/STARp2/$currentFile.trim.   \
-    --outSAMunmapped Within                                 \
-    --outSAMtype BAM SortedByCoordinate                     \
-    --sjdbFileChrStartEnd ${sjdbFiles[@]}                   \
-    --sjdbGTFfile $GTF                                      \
-    --outFilterType BySJout                                 ;
+    --outSAMunmapped Within                                    \
+    --outSAMtype BAM SortedByCoordinate                        \
+    --sjdbFileChrStartEnd ${sjdbFiles[@]}                      \
+    --sjdbGTFfile $GTF                                         \
+    --outFilterType BySJout                                    ;
 }
 
 picard() {
