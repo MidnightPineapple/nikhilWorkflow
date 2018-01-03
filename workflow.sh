@@ -98,7 +98,7 @@ echo $(date): "Final results in $P_DIR/$RESULTS/voom"
 if [ "$RESET" = true ]; then
   echo $(date): "Deleting intermediate files and folders in $P_DIR/$RESULTS"
   # IDEA: make a new make directory function within helper and keep track of the creation of each new results folder in an array so its more elegant
-  rm -rf "$RESULTS"/preTrimQC "$RESULTS"/trim "$RESULTS"/postTrimQC "$RESULTS"/STARp1 "$RESULTS"/STARp2 "$RESULTS"/bam_drem "$RESULTS"/counts
+  rm -rf "$RESULTS"/trim "$RESULTS"/STARp1 "$RESULTS"/STARp2 "$RESULTS"/bam_drem "$RESULTS"/counts
 fi
 
 echo $(date): "ALL DONE!"
