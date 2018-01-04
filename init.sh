@@ -67,7 +67,7 @@ while true; do
     read -p "Would you like to save the current configuration? " yn
     case $yn in
         [Yy1]* )
-          printf "P_DIR=\"$P_DIR\"\nstarGenome=\"$starGenome\"\nREF_GENOME=\"$REF_GENOME\"\nGTF=\"$GTF\"\nGA=\"$GA\"\nRESET=\"$RESET\"\n" > "$P_DIR"/config.sh;
+          printf "P_DIR=\"$P_DIR\"\nstarGenome=\"$starGenome\"\nREF_GENOME=\"$REF_GENOME\"\nGTF=\"$GTF\"\nGA=\"$GA\"\nRESET=\"$RESET\"\n" > "$DIR"/.config;
           echo "Saved ";
           break;;
         [Nn0]* ) break;;

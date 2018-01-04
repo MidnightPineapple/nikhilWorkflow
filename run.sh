@@ -37,11 +37,11 @@ DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
 
 # Ask whether we wanna use default configs or set anew
 # P_DIR, starGenome, REF_GENOME, GTF, GA, RESET
-if [[ -f $DIR/config.sh ]]; then
+if [[ -f $DIR/.config ]]; then
   while true; do
       read -p "Use saved configuration? " yn
       case $yn in
-          [Yy1]* ) . "$DIR"/config.sh; break;;
+          [Yy1]* ) . "$DIR"/.config; break;;
           [Nn0]* ) . "$DIR"/init.sh; break;;
           * ) echo "Please answer yes or no. ";;
       esac
