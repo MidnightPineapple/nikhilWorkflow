@@ -1,5 +1,4 @@
 #! /bin/bash
-clear
 
 # welcome message
 cat << EOF
