@@ -58,8 +58,10 @@ mkdir "$RESULTS"/voom
 module add R
 export R_LIBS="$P_DIR/bin/R_libs/" #adds R_LIBS path as an environment variable
 
-formatStringArray A_COUNTS GROUP_A "$P_DIR/$RESULTS/counts/" ".count.txt"; A_COUNTS=($A_COUNTS)
-formatStringArray B_COUNTS GROUP_B "$P_DIR/$RESULTS/counts/" ".count.txt"; B_COUNTS=($B_COUNTS)
+A_COUNTS=($(for $file in "${GROUP_A[@]}"; do basename $file| sed -e "s,.*, $P_DIR/$RESULTS/counts/&.count.txt,"; done;))
+B_COUNTS=($(for $file in "${GROUP_B[@]}"; do basename $file| sed -e "s,.*, $P_DIR/$RESULTS/counts/&.count.txt,"; done;))
+# formatStringArray A_COUNTS GROUP_A "$P_DIR/$RESULTS/counts/" ".count.txt"; A_COUNTS=($A_COUNTS)
+# formatStringArray B_COUNTS GROUP_B "$P_DIR/$RESULTS/counts/" ".count.txt"; B_COUNTS=($B_COUNTS)
 A_COUNTS_PATHS=$(joinBy , "${A_COUNTS[@]}")
 B_COUNTS_PATHS=$(joinBy , "${B_COUNTS[@]}")
 
