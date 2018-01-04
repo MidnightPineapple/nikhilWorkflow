@@ -1,6 +1,6 @@
 #! bin/bash
 
-####################HELPER FUNCTIONS####################3
+####################HELPER FUNCTIONS####################
 
 getDir() {
     local __outVar=$1;

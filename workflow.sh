@@ -1,31 +1,31 @@
 #! /bin/bash
-
-# clears the console
-clear
-
-# checks if the file was sourced
-if [[ ${BASH_SOURCE[0]} != $0 ]]; then
-  echo "This script is being sourced, so it may not run properly.";
-  echo
-  echo "Please quit and run this workflow within a subshell."
-  echo
-  echo "Use the command: 'bash path/to/workflow.sh'"
-  echo
-  read -n 1 -s -r -p "Press CTRL+C to quit or press any key to continue sourcing."
-  echo
-fi
-
-# Find program folder
-DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
-# Initializing Params and Helper Functions
-. "$DIR"/init.sh
-
-mkdir "$P_DIR"/"$LOGS"
-echo
-echo "Workflow starting in background with PID: ${$}";
-echo "Logs will be stored in $LOGS/log.txt";
-echo 'If this script was started using the bash function';
-echo 'then it will continue running after log out';
+#
+# # clears the console
+# clear
+#
+# # checks if the file was sourced
+# if [[ ${BASH_SOURCE[0]} != $0 ]]; then
+#   echo "This script is being sourced, so it may not run properly.";
+#   echo
+#   echo "Please quit and run this workflow within a subshell."
+#   echo
+#   echo "Use the command: 'bash path/to/workflow.sh'"
+#   echo
+#   read -n 1 -s -r -p "Press CTRL+C to quit or press any key to continue sourcing."
+#   echo
+# fi
+#
+# # Find program folder
+# DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
+# # Initializing Params and Helper Functions
+# . "$DIR"/init.sh
+#
+# mkdir "$P_DIR"/"$LOGS"
+# echo
+# echo "Workflow starting in background with PID: ${$}";
+# echo "Logs will be stored in $LOGS/log.txt";
+# echo 'If this script was started using the bash function';
+# echo 'then it will continue running after log out';
 ######################### START WORKFLOW ############################
 {
 # Make sure we're in the project directory before we actually start working...
@@ -49,8 +49,7 @@ echo $(date): 'FINISHED POSTTRIMQC'
 
 if [[ ! -d $starGenome ]]; then
     echo $(date): 'MAKING STARGENOME'
-    mkdir STARgenome
-    starGenome="$P_DIR"/STARgenome
+    mkdir "$P_DIR"/STARgenome
     genStarGenome >> "$LOGS"/genStarGenome.log.out 2>&1
     echo $(date): 'FINISHED MAKING STARGENOME'
 else
