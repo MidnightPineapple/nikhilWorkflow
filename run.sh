@@ -96,6 +96,6 @@ Results stored in: $RESULTS
 Logs stored in: $LOGS
 EOF
 
-. "$DIR"/workflow.sh
+. "$DIR"/workflow.sh >> "$LOGS"/log.out 2>&1 &
 
 cd $ORI

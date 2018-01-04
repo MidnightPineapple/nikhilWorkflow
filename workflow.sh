@@ -1,7 +1,6 @@
 #! /bin/bash
 
 ######################### START WORKFLOW ############################
-{
 # Make sure we're in the project directory before we actually start working...
 cd "$P_DIR"
 
@@ -75,5 +74,3 @@ if [ "$RESET" = true ]; then
 fi
 
 echo $(date): "ALL DONE!"
-
-} &> "$LOGS"/log.out &
