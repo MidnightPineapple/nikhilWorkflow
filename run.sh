@@ -89,11 +89,14 @@ then it will continue running after log out
 EOF
 
 cat << EOF >> "$P_DIR"/"$LOGS"/log.out
-Starting workflow on files
+Starting workflow on files:
   $GROUP_A_NAME (${#GROUP_A[@]}) : ${GROUP_A[@]}
   $GROUP_B_NAME (${#GROUP_B[@]}) : ${GROUP_B[@]}
-Results stored in: $RESULTS
-Logs stored in: $LOGS
+Results stored in: $P_DIR/$RESULTS
+Logs stored in: $P_DIR/$LOGS
+
+----
+
 EOF
 
 . "$DIR"/workflow.sh >> "$LOGS"/log.out 2>&1 &
