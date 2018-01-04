@@ -50,24 +50,40 @@ else
   . "$DIR"/init.sh
 fi
 
-# get group A and group B files by folder
-echo
-read -p "Please input the name of group A. " GROUP_A_NAME;
-read -p "Please input the name of group B. " GROUP_B_NAME;
-echo "Please make sure $GROUP_A_NAME and $GROUP_B_NAME fastq files are separated into different folders."
-echo "Please input group $GROUP_A_NAME directory path"
-getDir GROUP_A_DIR;
-IFS=$'\n'
-GROUP_A=($(readlink -e "$GROUP_A_DIR"/* | grep .fastq$));
-unset IFS
-echo "Found ${#GROUP_A[@]} fastq files."
-echo
-echo "Please input group $GROUP_B_NAME directory path"
-getDir GROUP_B_DIR;
-IFS=$'\n'
-GROUP_B=($(readlink -e "$GROUP_B_DIR"/* | grep .fastq$));
-unset IFS
-echo "Found ${#GROUP_B[@]} fastq files."
+# get group A and group B files by folder or by positional parameters
+
+if [ $# == 2 ]; then
+  if [[ ! -d "$1" ]] || [[ ! -d "$2" ]]; then
+    echo "Error: Invalid directory!"
+    exit
+  fi
+  GROUP_A_DIR="$(readlink -e "$1")"
+  GROUP_A_NAME="$(basename "$GROUP_A_DIR")"
+  GROUP_B_DIR="$(readlink -e "$2")"
+  GROUP_B_NAME="$(basename "$GROUP_B_DIR")"
+  IFS=$'\n'
+  GROUP_A=($(readlink -e "$GROUP_A_DIR"/* | grep .fastq$))
+  GROUP_B=($(readlink -e "$GROUP_B_DIR"/* | grep .fastq$))
+  unset IFS
+else
+  echo
+  read -p "Please input the name of group A. " GROUP_A_NAME;
+  read -p "Please input the name of group B. " GROUP_B_NAME;
+  echo "Please make sure $GROUP_A_NAME and $GROUP_B_NAME fastq files are separated into different folders."
+  echo "Please input group $GROUP_A_NAME directory path"
+  getDir GROUP_A_DIR;
+  IFS=$'\n'
+  GROUP_A=($(readlink -e "$GROUP_A_DIR"/* | grep .fastq$))
+  unset IFS
+  echo "Found ${#GROUP_A[@]} fastq files."
+  echo
+  echo "Please input group $GROUP_B_NAME directory path"
+  getDir GROUP_B_DIR;
+  IFS=$'\n'
+  GROUP_B=($(readlink -e "$GROUP_B_DIR"/* | grep .fastq$))
+  unset IFS
+  echo "Found ${#GROUP_B[@]} fastq files."
+fi
 GROUP_ALL=("${GROUP_A[@]}" "${GROUP_B[@]}")
 
 # make results and log folder names particular to this run

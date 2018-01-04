@@ -5,9 +5,9 @@
 getDir() {
     local __outVar=$1;
     local DIR=0;
-    while [ ! -d $DIR ]; do
+    while [ ! -d "$DIR" ]; do
         read -p "" DIR;
-        if [ ! -d $DIR ]; then echo "Directory does not exist. Please try again. "; fi;
+        if [ ! -d "$DIR" ]; then echo "Directory does not exist. Please try again. "; fi;
     done;
     DIR=$(readlink -e $DIR)
     eval $__outVar="'$DIR'"

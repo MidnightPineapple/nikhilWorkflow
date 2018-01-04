@@ -1,14 +1,7 @@
 #! bin/bash
 
-# IDEA: way to make this faster: create a settings.sh and have default values written in it
-#. Ask if user would like to use default values and bypass all this repetitive file name entry
-# also use getopts to allow this whole workflow to be run with a one line command
-#. also GROUP_A=($(readlink -e $FASTQ_DIR/* | grep .fastq$)) is sufficient to store all file paths from group A
-#.   if groupA is the only collection in that folder
-#. I should also use symlinks to make it quicker and save space (create symlinks with ln -s path/to/file path/to/symlink )
-#. also add code so that init.sh can create a default values file
-#. make sure to echo long multiline things of text with the heredoc syntax > cat << "EOF"
-#
+# TODO: use getopts to allow this whole workflow to be run with a one line command
+
 
 #Get into project directory
 echo "Please input project directory."
