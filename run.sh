@@ -68,7 +68,7 @@ IFS=$'\n'
 GROUP_B=($(readlink -e "$GROUP_B_DIR"/* | grep .fastq$));
 unset IFS
 echo "Found ${#GROUP_B[@]} fastq files."
-GROUP_ALL=(${GROUP_A[@]} ${GROUP_B[@]})
+GROUP_ALL=("${GROUP_A[@]}" "${GROUP_B[@]}")
 
 # make results and log folder names particular to this run
 # c=$(echo $b | tr -cd [a-z0-9\-\_])
@@ -86,6 +86,14 @@ Workflow starting in background with PID: ${$}
 Logs will be stored in $LOGS/log.txt
 If this script was started using the bash function
 then it will continue running after log out
+EOF
+
+cat << EOF >> "$P_DIR"/"$LOGS"/log.out
+Starting workflow on files
+  $GROUP_A_NAME (${#GROUP_A[@]}) : ${GROUP_A[@]}
+  $GROUP_B_NAME (${#GROUP_B[@]}) : ${GROUP_B[@]}
+Results stored in: $RESULTS
+Logs stored in: $LOGS
 EOF
 
 . "$P_DIR"/workflow.sh

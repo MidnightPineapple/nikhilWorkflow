@@ -10,15 +10,6 @@
 #. make sure to echo long multiline things of text with the heredoc syntax > cat << "EOF"
 #
 
-# Find program folder
-# DIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )" )"
-#
-# #loads functions into session
-# . "$DIR"/helper.sh
-# . "$DIR"/functions.sh
-#
-# ORI=$(pwd)
-
 #Get into project directory
 echo "Please input project directory."
 echo "The tools necessary for this workflow should be installed within the scope of this directory"
