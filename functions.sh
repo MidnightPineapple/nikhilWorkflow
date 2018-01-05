@@ -47,7 +47,7 @@ star1() {
     local currentFile=$(basename $currentFilePath);
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                      \
     --genomeDir $starGenome                                    \
-    --alignIntronMax 10000                                     \
+    --alignIntronMax 5000                                      \
     --readFilesIn "$RESULTS"/trim/$currentFile.trim            \
     --outFileNamePrefix "$RESULTS"/STARp1/$currentFile.trim.   \
     --outSAMtype BAM Unsorted                                  ;
@@ -59,7 +59,7 @@ star2() {
     local currentFile=$(basename $currentFilePath);
     bin/STAR-2.5.2b/bin/Linux_x86_64/STAR                      \
     --genomeDir $starGenome                                    \
-    --alignIntronMax 10000                                     \
+    --alignIntronMax 5000                                      \
     --readFilesIn "$RESULTS"/trim/$currentFile.trim            \
     --outFileNamePrefix "$RESULTS"/STARp2/$currentFile.trim.   \
     --outSAMunmapped Within                                    \
