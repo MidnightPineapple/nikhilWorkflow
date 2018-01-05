@@ -37,7 +37,7 @@ echo $(date): 'FINISHED STAR PASS 1'
 #makes array of all sjdb files
 #formatStringArray sjdbFileString GROUP_ALL "$RESULTS/STARp1/" ".trim.SJ.out.tab"
 sjdbFileString=($(for file in "${GROUP_ALL[@]}"; do basename "$file"| sed -e "s,.*, $RESULTS/STARp1/&.trim.SJ.out.tab,"; done;))
-sjdbFiles=($sjdbFileString)
+sjdbFiles=("${sjdbFileString[@]}")
 
 echo $(date): 'RUNNING STAR PASS 2'
 mkdir "$RESULTS"/STARp2
