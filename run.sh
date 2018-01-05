@@ -103,7 +103,8 @@ dirExists "$P_DIR" "$RESULTS"
 mkdir "$P_DIR"/"$LOGS"
 cat << EOF
 Workflow starting in background with PID: ${$}
-Logs will be stored in $LOGS/log.txt
+Logs will be stored in $P_DIR/$LOGS
+Results will be stored in $P_DIR/$RESULTS
 If this script was started using the bash function
 then it will continue running after log out
 EOF
