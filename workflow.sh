@@ -35,7 +35,8 @@ loopThru GROUP_ALL star1 >> "$LOGS"/STARp1.log.out 2>&1
 echo $(date): 'FINISHED STAR PASS 1'
 
 #makes array of all sjdb files
-formatStringArray sjdbFileString GROUP_ALL "$RESULTS/STARp1/" ".trim.SJ.out.tab"
+#formatStringArray sjdbFileString GROUP_ALL "$RESULTS/STARp1/" ".trim.SJ.out.tab"
+sjdbFileString=($(for file in "${GROUP_ALL[@]}"; do basename "$file"| sed -e "s,.*, $RESULTS/STARp1/&.trim.SJ.out.tab,"; done;))
 sjdbFiles=($sjdbFileString)
 
 echo $(date): 'RUNNING STAR PASS 2'
