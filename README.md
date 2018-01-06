@@ -12,7 +12,7 @@
  - subread-1.5.1                                            
  - R 3.3.1      
 Please make sure these are all installed within the scope of the bash environment at runtime.
-The program will look for all execpt for java in the bin file within the project directory.
+The program will look for all execpt for java in the bin directory within the project directory.
 ---
 
 ### This workflow utilizes the following reference files:      
@@ -35,4 +35,4 @@ After the first run the workflow can be run with the syntax `bash run.sh group_A
 
 #### Modifications to the workflow
 * Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by modifying functions.sh
-* Modifications to the threshold FDR and FC values can be made in the first few lines of limmavoom.R 
+* Modifications to the threshold FDR and FC values can be made in the first few lines of limmavoom.R
