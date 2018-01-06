@@ -1,7 +1,8 @@
 # Differential Expression Analysis Workflow        
-*By Nikhil Gowda & Sam Chen*
+*By Nikhil Gowda, Sam Chen, Dr. Xiao-Ning Zhang*
 
 ---
+> Feel free to download or fork this repository for your use and modification. 
 
 ### This workflow utilizes the following versions of each tool:
  - FastQC v0.11.5                                           
