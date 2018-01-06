@@ -28,11 +28,17 @@ This workflow expects that the fastq files for different treatment groups are se
 ### How to use
 
 #### Run
+
 Run this workflow anytime by running `run.sh` with the bash command. (ie `bash path/to/run.sh`)
+
 The workflow will ask for the location of the required files. The settings can be saved as a `.config` file.
 
-After the first run the workflow can be run with the syntax `bash run.sh group_A_fastq_folder_path group_b_fastq_folder_path`
+After the first run the workflow can be run with the syntax
+```bash
+bash run.sh group_A_fastq_folder_path group_b_fastq_folder_path
+```
 
 #### Modifications to the workflow
-* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by modifying functions.sh
-* Modifications to the threshold FDR and FC values can be made in the first few lines of limmavoom.R
+
+* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by making changes to `functions.sh`
+* Modifications to the threshold FDR and FC values can be made in the first few lines of `limmavoom.R`
