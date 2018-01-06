@@ -2,7 +2,7 @@
 *By Nikhil Gowda, Sam Chen, Dr. Xiao-Ning Zhang*
 
 ---
-> Feel free to download or fork this repository for your use and modification. 
+> Feel free to download or fork this repository for your use and customization. 
 
 ### This workflow utilizes the following versions of each tool:
  - FastQC v0.11.5                                           
