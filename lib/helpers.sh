@@ -12,6 +12,12 @@ loopThru() {
     done
 }
 
+joinBy() {
+    local IFS="$1";
+    shift;
+    echo "$*";
+}
+
 makeDirectoryIfNotExists() {
     local dirPath="$1"
     if [[ ! -d "$dirPath" ]]; then

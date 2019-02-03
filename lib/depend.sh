@@ -11,8 +11,7 @@ depend() {
 need() {
     for __varname in "$@"; do
         if [[ -z "${!__varname+x}" ]]; then
-            echo "Variable $__varname not defined" 1>&2
-            exit 1;
+            error "Variable $__varname not defined" 
         fi
     done
 }
@@ -23,4 +22,11 @@ validate() {
     done
 }
 
-
+uses() {
+    for __facade in "$@"; do
+        local __useFacade="use${__facade^}"
+        if [[ -n "$(type -t $__useFacade)" ]] && [[ "$(type -t $__useFacade)" = "function" ]]; then
+            $__useFacade
+        fi
+    done
+}

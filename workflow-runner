@@ -18,13 +18,13 @@ EOM
 while getopts ":c:h" opt; do
     case "$opt" in
     c ) 
-        __config_filepath="$opt"
+        __config_filepath="$OPTARG"
         ;;
     h ) 
         usage 
         ;;
     d ) 
-        echo "Debugging: __should_run=false"
+        log "Debugging: __should_run=false"
         __should_run=false
         ;;
     : )
@@ -35,7 +35,7 @@ while getopts ":c:h" opt; do
         error "Invalid option: $OPTARG" 
         ;;
     esac
-done
+done; shift $((OPTIND-1))
 
 source "$__dirname/boot.sh"
 source "$__dirname/configure.sh"

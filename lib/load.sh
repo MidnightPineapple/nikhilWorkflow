@@ -35,6 +35,7 @@ feature[Cc]ounts)
 [Rr])
     module load GNU/7.3.0-2.30  OpenMPI/3.1.1 R/3.5.1-X11-20180604
     alias iR="R"
+    alias iRscript="Rscript --vanilla"
     ;;
 *)
     usageLoad
