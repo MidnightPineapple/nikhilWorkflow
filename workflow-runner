@@ -1,0 +1,51 @@
+#! usr/bin/env bash
+
+__thispath="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null||echo $0)"
+__dirname="$(dirname "$__thispath")"
+__wd="$PWD"
+__should_run=true
+
+usage() {
+    cat <<EOM
+Usage: $0 -c config_file [-g <config|slurm>] [-h]
+Options:
+    -c config file path
+    -g generates a slurm file or example config file for your workflow without running it
+    -h this helpful message
+EOM
+}
+
+while getopts ":c:h" opt; do
+    case "$opt" in
+    c ) 
+        __config_filepath="$opt"
+        ;;
+    h ) 
+        usage 
+        ;;
+    d ) 
+        echo "Debugging: __should_run=false"
+        __should_run=false
+        ;;
+    : )
+        error "Invalid option: $OPTARG requires an argument"
+        ;; 
+    \? ) 
+        usage 1>&2
+        error "Invalid option: $OPTARG" 
+        ;;
+    esac
+done
+
+source "$__dirname/boot.sh"
+source "$__dirname/configure.sh"
+
+cd "$outputDirectory"
+
+if [[ "$__should_run" = true ]]; then
+    if [[ -x "$workflowFile" ]]; then
+        source "$workflowFile"
+    else 
+        error "Executable workflow file not found at $workflowFile" 
+    fi
+fi
