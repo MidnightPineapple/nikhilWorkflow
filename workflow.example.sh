@@ -2,16 +2,14 @@
 
 uses "pretrim" "trim" "posttrim" "generateStarGenome" "star1" "star2" "removeDuplicates" "countGenes" "limma"
 
-depend "groups"
-
 ########### PRETRIM ############
-loopThru pretrim groups 
+loopThru pretrim __groups 
 
 ########### TRIM #############
-loopThru trim groups 
+loopThru trim __groups 
 
 ########### POSTTRIM ###########
-loopThru posttrim groups 
+loopThru posttrim __groups 
 
 ########### STAR GENOME GENERATE ############
 depend "starGenome" "outputDirectory"
@@ -22,18 +20,16 @@ else
 fi
 
 ############ STAR PASS 1 ###############
-loopThru star1 groups 
+loopThru star1 __groups 
 
 ########### STAR PASS 2 ##############
-loopThru star2 groups 
+loopThru star2 __groups 
 
 ########## REMOVE DUPLICATES ############
-loopThru removeDuplicates groups 
+loopThru removeDuplicates __groups 
 
 ######### COUNT FEATURES ###############
-loopThru countGenes groups
+loopThru countGenes __groups
 
 ######### LIMMA VOOM ##############
 limma
-
-log "All Done! Cheers" "$(clink)"

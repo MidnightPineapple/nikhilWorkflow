@@ -6,9 +6,9 @@ else
     error "Config file not found at $__config_filepath" 
 fi
 
-need "outputDirectory" "workflowFile"
+finalize
 
-# TODO: find abs path here
+need "outputDirectory" "workflowFile"
 
 __log_directory="$outputDirectory/logs"
 __results_directory="$outputDirectory/results"
@@ -23,7 +23,14 @@ for line in $(awk '$0 ~ "^(depend|uses)" { print }' $workflowFile); do
 done
 unset IFS
 
-validate
+need "group1Directory" "group2Directory"
+
+IFS=$'\n'
+__group_1=( $(readlink -e "$group1Directory"/* | grep .fastq) )
+__group_2=( $(readlink -e "$group2Directory"/* | grep .fastq) )
+unset IFS
+__groups=( "${__group_1[@]}" "${__group_2[@]}" )
+
 
 __configure=true
 

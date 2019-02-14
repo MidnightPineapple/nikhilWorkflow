@@ -45,7 +45,10 @@ cd "$outputDirectory"
 if [[ "$__should_run" = true ]]; then
     if [[ -x "$workflowFile" ]]; then
         source "$workflowFile"
+        log "All Done! Cheers~" "$(clink)"
     else 
         error "Executable workflow file not found at $workflowFile" 
     fi
 fi
+
+cd "$__wd"
