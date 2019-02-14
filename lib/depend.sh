@@ -24,7 +24,12 @@ validate() {
 
 absolute() {
     for __name in "${__necessary_globals[@]}"; do
-        eval "$__name"="\"$(readlink -e "${!__name}")\""
+        if [[ -d "${!__name}" ]] || [[ -f "${!__name}" ]]; then 
+            eval "$__name"="\"$(readlink -e "${!__name}")\""
+            log "$__name is set to ${!__name}"
+        else 
+            warn "$__name is not a file or directory"
+        fi
     done
 }
 
