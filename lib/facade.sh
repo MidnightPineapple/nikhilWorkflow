@@ -1,4 +1,4 @@
-#! usr/bin/env bash
+#! /usr/bin/env bash
 
 usePretrim() {
     pretrim() {
@@ -8,11 +8,12 @@ usePretrim() {
 
         local currentFilePath="$1"
         local currentFile="$(basename $currentFilePath)"
+
         log "Starting PretrimQC for $currentFile"
         iFastqc                                       \
         "$currentFilePath"                            \
         --outdir="$__results_directory"/preTrimQC/    ;
-        log "Finished PretrimQC"
+        log "Finished PretrimQC for $currentFile"
     }
 }
 
@@ -30,7 +31,7 @@ useTrim() {
         "$currentFilePath"                                      \
         "$__results_directory/trim/$currentFile.trim"           \
         HEADCROP:13                                             ;
-        log "FInished Trim"
+        log "Finished Trim for $currentFile"
     }
 }
 
@@ -46,7 +47,7 @@ usePosttrim() {
         iFastqc                                         \
         "$__results_directory/trim/$currentFile.trim"   \
         --outdir="$__results_directory"/postTrimQC/     ;
-        log "Finished PosttrimQC"
+        log "Finished PosttrimQC for $currentFile"
     }
 }
 
@@ -86,7 +87,7 @@ useStar1() {
         --readFilesIn "$__results_directory/trim/$currentFile.trim"             \
         --outFileNamePrefix "$__results_directory/STARp1/$currentFile.trim."    \
         --outSAMtype BAM Unsorted                                               ;
-        log "Finished STAR first pass"
+        log "Finished STAR first pass for $currentFile"
     }
 }
 
@@ -111,7 +112,7 @@ useStar2() {
         --sjdbFileChrStartEnd "${sjdbFiles[@]}"                                 \
         --sjdbGTFfile "$featureAnnotationsFile"                                 \
         --outFilterType BySJout                                                 ;
-        log "Finished STAR second pass"
+        log "Finished STAR second pass for $currentFile"
     }
 }
 
@@ -131,7 +132,7 @@ useRemoveDuplicates() {
         M="$__results_directory"/bam_drem/$currentFile.metrics.txt                          \
         REMOVE_DUPLICATES=true                                                  \
         CREATE_INDEX=true                                                       ;
-        log "Finished removing duplicates"
+        log "Finished removing duplicates for $currentFile"
     }
 }
 
@@ -153,7 +154,7 @@ useCountGenes() {
         -a "$featureAnnotationsFile"                \
         -o "$__results_directory"/counts/$currentFile.count.txt    \
         "$__results_directory"/bam_drem/$currentFile.bam           ;
-        log "Finished counting features"
+        log "Finished counting features for $currentFile"
     }
 }
 

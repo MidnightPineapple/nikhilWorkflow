@@ -36,4 +36,4 @@ loopThru countGenes groups
 ######### LIMMA VOOM ##############
 limma
 
-log "All Done! Cheers" $'\U1F37B'
+log "All Done! Cheers" "$(clink)"

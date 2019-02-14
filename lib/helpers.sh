@@ -26,7 +26,7 @@ makeDirectoryIfNotExists() {
 }
 
 error() {
-    local message="$1"
+    local message="$*"
     echo -e "\e[2;34m$(date) \e[22;1;91mERROR\e[0m: $message" 1>&2
     exit 1
 }
@@ -37,4 +37,20 @@ log() {
 
 warn() {
     echo -e "\e[2;34m$(date) \e[22;1;93mWARN\e[0m: $@"
+}
+
+clink() {
+    echo $'\U1F37B'
+}
+
+load() {
+    if [[ "$#" -ne 1 ]]; then 
+        error "load takes one argument"
+    fi
+
+    source $__dirname/lib/load.sh "$1"
+
+    if [[ "$?" -ne 0 ]]; then
+        error "Unable to load $1"
+    fi
 }

@@ -1,4 +1,4 @@
-#! usr/bin/env bash
+#! /usr/bin/env bash
 
 if [[ -z "$__necessary_globals" ]]; then
     __necessary_globals=( )
@@ -27,6 +27,8 @@ uses() {
         local __useFacade="use${__facade^}"
         if [[ -n "$(type -t $__useFacade)" ]] && [[ "$(type -t $__useFacade)" = "function" ]]; then
             $__useFacade
+        else 
+            error "$__facade is not a facade"
         fi
     done
 }

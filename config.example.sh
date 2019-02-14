@@ -13,7 +13,7 @@ group2DirectoryAbsolute="$(readlink -e $group2Directory)"
 group1Name="$(basename $group1DirectoryAbsolute)"
 group2Name="$(basename $group2DirectoryAbsolute)"
 IFS=$'\n'
-group1=("$(readlink -e "$__group_1_path/*" | grep .fastq)")
-group2=("$(readlink -e "$__group_2_path/*" | grep .fastq)")
+group1=( $(readlink -e "$group1DirectoryAbsolute"/* | grep .fastq) )
+group2=( $(readlink -e "$group2DirectoryAbsolute"/* | grep .fastq) )
 unset IFS
-groups=( "${__group_1[@]}" "${__group_2[@]}" )
+groups=( "${group1[@]}" "${group2[@]}" )
