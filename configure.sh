@@ -26,10 +26,10 @@ unset IFS
 need "group1Directory" "group2Directory"
 
 IFS=$'\n'
-__group_1=( $(readlink -e "$group1Directory"/* | grep .fastq) )
-__group_2=( $(readlink -e "$group2Directory"/* | grep .fastq) )
+group1=( $(readlink -e "$group1Directory"/* | grep .fastq) )
+group2=( $(readlink -e "$group2Directory"/* | grep .fastq) )
 unset IFS
-__groups=( "${__group_1[@]}" "${__group_2[@]}" )
+groups=( "${group1[@]}" "${group2[@]}" )
 
 
 __configure=true

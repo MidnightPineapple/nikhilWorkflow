@@ -94,13 +94,15 @@ useStar1() {
 useStar2() {
     depend "starGenome" "featureAnnotationsFile"
     star2() {
+        need "groups"
+
         load star
 
         makeDirectoryIfNotExists "$__results_directory"/STARp2
 
         local currentFilePath="$1"
         local currentFile="$(basename $currentFilePath)"
-        local sjdbFiles=( "$(for file in "${__groups[@]}"; do basename "$file"| sed -e "s,.*, $__results_directory/STARp1/&.trim.SJ.out.tab,"; done;)" )
+        local sjdbFiles=( "$(for file in "${groups[@]}"; do basename "$file"| sed -e "s,.*, $__results_directory/STARp1/&.trim.SJ.out.tab,"; done;)" )
         log "Starting STAR second pass for $currentFile"
         iStar                                                                   \
         --genomeDir "$starGenome"                                               \
@@ -161,14 +163,16 @@ useCountGenes() {
 useLimma() {
     depend "goAnnotationsFile" "group1Name" "group2Name" "outputDirectory"
     limma() {
+        need "group1" "group2"
+
         load r
 
         makeDirectoryIfNotExists "$__results_directory"/voom
 
         log "Starting Limma Voom Analysis"
         
-        local group1CountsArray=($(for file in "${__group1[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
-        local group2CountsArray=($(for file in "${__group2[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
+        local group1CountsArray=($(for file in "${group1[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
+        local group2CountsArray=($(for file in "${group2[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
         local group1Counts=$(joinBy , "${group1CountsArray[@]}")
         local group2Counts=$(joinBy , "${group2CountsArray[@]}")
 

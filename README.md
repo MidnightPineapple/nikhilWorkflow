@@ -36,7 +36,7 @@ The workflow will ask for the location of the required files. The settings can b
 
 After the first run the workflow can be run with the syntax
 ```bash
-bash run.sh group_A_fastq_folder_path group_b_fastq_folder_path
+workflow-runner -c <config file path>
 ```
 
 #### Modifications to the workflow

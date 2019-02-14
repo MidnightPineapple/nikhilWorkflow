@@ -3,13 +3,13 @@
 uses "pretrim" "trim" "posttrim" "generateStarGenome" "star1" "star2" "removeDuplicates" "countGenes" "limma"
 
 ########### PRETRIM ############
-loopThru pretrim __groups 
+loopThru pretrim groups 
 
 ########### TRIM #############
-loopThru trim __groups 
+loopThru trim groups 
 
 ########### POSTTRIM ###########
-loopThru posttrim __groups 
+loopThru posttrim groups 
 
 ########### STAR GENOME GENERATE ############
 depend "starGenome" "outputDirectory"
@@ -20,16 +20,16 @@ else
 fi
 
 ############ STAR PASS 1 ###############
-loopThru star1 __groups 
+loopThru star1 groups 
 
 ########### STAR PASS 2 ##############
-loopThru star2 __groups 
+loopThru star2 groups 
 
 ########## REMOVE DUPLICATES ############
-loopThru removeDuplicates __groups 
+loopThru removeDuplicates groups 
 
 ######### COUNT FEATURES ###############
-loopThru countGenes __groups
+loopThru countGenes groups
 
 ######### LIMMA VOOM ##############
 limma
