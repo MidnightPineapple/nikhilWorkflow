@@ -7,3 +7,6 @@ _*
 
 # Config File
 .config
+
+# Just for syncing my local dev files to the server
+rsync.txt

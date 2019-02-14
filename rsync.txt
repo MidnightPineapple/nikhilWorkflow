@@ -1,3 +1,0 @@
-alias rsync-send="rsync -avz . f0008011@rsync.hpcc.msu.edu:~/RNAseq-workflow"
-alias rsync-get="rsync -avz f0008011@rsync.hpcc.msu.edu:~/RNAseq-workflow ."
-
