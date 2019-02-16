@@ -1,3 +1,4 @@
-# Change CRLF to LF in .sh files
+# Change CRLF to LF in .bash files
 
 *.sh text
+*.bash text

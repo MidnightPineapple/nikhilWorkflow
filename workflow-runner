@@ -4,7 +4,7 @@ __thispath="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null||echo $0)"
 __dirname="$(dirname "$__thispath")"
 __wd="$PWD"
 __should_run=true
-source "$__dirname/boot.sh"
+source "$__dirname/boot.bash"
 
 usage() {
     cat <<EOM
@@ -38,7 +38,7 @@ while getopts ":c:hd" opt; do
     esac
 done; shift $((OPTIND-1))
 
-source "$__dirname/configure.sh"
+source "$__dirname/configure.bash"
 
 cd "$outputDirectory"
 

@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 need "__config_filepath"
 
 if [[ -f "$__config_filepath" ]]; then

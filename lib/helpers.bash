@@ -48,7 +48,7 @@ load() {
         error "load takes one argument"
     fi
 
-    source $__dirname/lib/load.sh "$1"
+    source $__dirname/lib/load.bash "$1"
 
     if [[ "$?" -ne 0 ]]; then
         error "Unable to load $1"

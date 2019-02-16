@@ -30,7 +30,7 @@ This workflow expects that the fastq files for different treatment groups are se
 
 #### Run
 
-To run, you must specify a config.sh file that contains all global 
+To run, you must specify a config.bash file that contains all global 
 variables that the workflow depends on including the `$workflowFile` and `$outputDirectory`.
 
 ```bash
@@ -49,5 +49,5 @@ bats -r ./test
 
 #### Modifications to the workflow
 
-* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by making changes to `facade.sh`
+* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by making changes to `facade.bash`
 * Modifications to the threshold FDR and FC values can be made in the first few lines of `limmavoom.R`
