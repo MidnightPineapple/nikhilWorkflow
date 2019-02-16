@@ -56,7 +56,7 @@ useGenerateStarGenome() {
     generateStarGenome() {
         load star
 
-        makeDirectoryIfNotExists "$outputDirectory"/STARgenome
+        makeDirectoryIfNotExists "$outputDirectory/StarGenome"
 
         log "Starting STAR genomeGenerate"
         iStar                                       \
@@ -66,7 +66,7 @@ useGenerateStarGenome() {
         --sjdbGTFfile "$featureAnnotationsFile"     ;
         log "Finished STAR genomeGenerate"
 
-        starGenome="$outputDirectory"/STARgenome
+        starGenome="$outputDirectory/StarGenome"
     }
     #    --sjdbOverhang 33                       ;
 }

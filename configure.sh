@@ -10,13 +10,17 @@ finalize
 
 need "outputDirectory" "workflowFile"
 
-__log_directory="$outputDirectory/logs"
+makeDirectoryIfNotExists "$outputDirectory"
+
+outputDirectory="$(readlink -e "$outputDirectory")"
+workflowFile="$(readlink -e "$workflowFile")"
+
+__log_file="$outputDirectory/log.txt"
 __results_directory="$outputDirectory/results"
 makeDirectoryIfNotExists "$__results_directory"
-makeDirectoryIfNotExists "$__log_directory"
 
 IFS=$'\n'
-for line in $(awk '$0 ~ "^(depend|uses)" { print }' $workflowFile); do
+for line in $(awk '$0 ~ "^(depend|uses)" { print }' "$workflowFile"); do
     unset IFS
     eval $line
     IFS=$'\n'
