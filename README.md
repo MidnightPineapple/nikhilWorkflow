@@ -30,16 +30,24 @@ This workflow expects that the fastq files for different treatment groups are se
 
 #### Run
 
-Run this workflow anytime by running `run.sh` with the bash command. (ie `bash path/to/run.sh`)
+To run, you must specify a config.sh file that contains all global 
+variables that the workflow depends on including the `$workflowFile` and `$outputDirectory`.
 
-The workflow will ask for the location of the required files. The settings can be saved as a `.config` file.
-
-After the first run the workflow can be run with the syntax
 ```bash
 workflow-runner -c <config file path>
 ```
 
+#### Testing
+
+This project will use [Bash Automated Testing System (`bats`)](https://github.com/bats-core/bats-core)
+
+If `bats` is installed, run
+
+```bash
+bats -r ./test
+```
+
 #### Modifications to the workflow
 
-* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by making changes to `functions.sh`
+* Modifications can be made to the parameters provided to workflow tools such as FastQC and STAR by making changes to `facade.sh`
 * Modifications to the threshold FDR and FC values can be made in the first few lines of `limmavoom.R`

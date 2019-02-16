@@ -1,0 +1,3 @@
+# Change CRLF to LF in .sh files
+
+*.sh text
