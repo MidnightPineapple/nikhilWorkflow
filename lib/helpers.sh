@@ -6,7 +6,7 @@ loopThru() {
     local array=("${!arrayName}")
     local counter=0
     while [ $counter -lt ${#array[@]} ]; do
-        echo "Performing operation iteration number $(expr $counter + 1)"
+        log "Performing $operation iteration $(expr $counter + 1)"
         "$operation" "${array[$counter]}" "${@}"
         let counter=counter+1
     done
