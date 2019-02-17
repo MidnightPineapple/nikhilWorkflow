@@ -102,8 +102,15 @@ useStar2() {
 
         local currentFilePath="$1"
         local currentFile="$(basename $currentFilePath)"
-        local sjdbFiles=( "$(for file in "${groups[@]}"; do basename "$file"| sed -e "s,.*, $__results_directory/STARp1/&.trim.SJ.out.tab,"; done;)" )
+
+        local IFS=$'\n'
+        local sjdbFiles=( $(for file in "${groups[@]}"; do basename "$file"| sed -e "s,.*, $__results_directory/STARp1/&.trim.SJ.out.tab,"; done;) )
+        unset IFS
+
         log "Starting STAR second pass for $currentFile"
+
+        # ! Why tf does this fail if sjdbFiles has quotes around it...
+
         iStar                                                                   \
         --genomeDir "$starGenome"                                               \
         --alignIntronMax 5000                                                   \
@@ -111,7 +118,7 @@ useStar2() {
         --outFileNamePrefix "$__results_directory/STARp2/$currentFile.trim."    \
         --outSAMunmapped Within                                                 \
         --outSAMtype BAM SortedByCoordinate                                     \
-        --sjdbFileChrStartEnd "${sjdbFiles[@]}"                                 \
+        --sjdbFileChrStartEnd ${sjdbFiles[@]}                                   \
         --sjdbGTFfile "$featureAnnotationsFile"                                 \
         --outFilterType BySJout                                                 ;
         log "Finished STAR second pass for $currentFile"
@@ -141,7 +148,7 @@ useRemoveDuplicates() {
 useCountGenes() {
     depend "featureAnnotationsFile"
     countGenes() {
-        load subread
+        load featureCounts
 
         makeDirectoryIfNotExists "$__results_directory"/counts
 

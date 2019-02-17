@@ -8,7 +8,7 @@ else
     error "Config file not found at $__config_filepath" 
 fi
 
-finalize
+finalize # ! apparently the absolute function isn't working
 
 need "outputDirectory" "workflowFile"
 
