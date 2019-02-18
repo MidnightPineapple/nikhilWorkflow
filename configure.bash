@@ -8,8 +8,6 @@ else
     error "Config file not found at $__config_filepath" 
 fi
 
-finalize # ! apparently the absolute function isn't working
-
 need "outputDirectory" "workflowFile"
 
 makeDirectoryIfNotExists "$outputDirectory"
@@ -37,6 +35,7 @@ group2=( $(readlink -e "$group2Directory"/* | grep .fastq) )
 unset IFS
 groups=( "${group1[@]}" "${group2[@]}" )
 
+finalize 
 
 __configure=true
 
