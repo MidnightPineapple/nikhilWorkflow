@@ -12,6 +12,18 @@ loopThru() {
     done
 }
 
+forEach() {
+    local arrayName="$1[@]"; shift
+    local operation="$1"; shift
+    local array=("${!arrayName}")
+    local counter=0
+    while [ $counter -lt ${#array[@]} ]; do
+        log "Performing $operation iteration $(expr $counter + 1)"
+        "$operation" "${array[$counter]}" "${@}"
+        let counter=counter+1
+    done
+}
+
 joinBy() {
     local IFS="$1";
     shift;

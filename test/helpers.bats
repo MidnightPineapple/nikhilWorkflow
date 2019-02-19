@@ -1,6 +1,6 @@
 #! /usr/bin/env bats
 
-load ../lib/helpers
+load ../boot
 
 @test "log function prints a log" {
 
@@ -29,3 +29,51 @@ load ../lib/helpers
 
 }
 
+@test "joinby can join a list of parameters with some string" {
+
+    run joinBy ";:;:" "wa" "ha" "ha"
+    [[ $output = "wa;:;:ha;:;:ha" ]]
+
+}
+
+@test "joinby can join an array expansion with some string" {
+
+    local arr=( "wa" "ha" "ha" )
+    run joinBy ";:;:" "${arr[@]}"    
+    [[ $output = "wa;:;:ha;:;:ha" ]]
+
+}
+
+@test "loopThru goes through each element of the array and performs some operation" {
+
+    local arr=( 1 2 3 )
+    run loopThru echo arr "foo" "bar" "baz"
+    [[ "${lines[0]}" =~ "iteration 1" ]]
+    [[ "${lines[1]}" = "1 foo bar baz" ]]
+    [[ "${lines[2]}" =~ "iteration 2" ]]
+    [[ "${lines[3]}" = "2 foo bar baz" ]]
+    [[ "${lines[4]}" =~ "iteration 3" ]]
+    [[ "${lines[5]}" = "3 foo bar baz" ]]
+
+}
+
+@test "forEach goes through each element of the array and performs some operation" {
+
+    local arr=( 1 2 3 )
+    run forEach arr echo "foo" "bar" "baz"
+    [[ "${lines[0]}" =~ "iteration 1" ]]
+    [[ "${lines[1]}" = "1 foo bar baz" ]]
+    [[ "${lines[2]}" =~ "iteration 2" ]]
+    [[ "${lines[3]}" = "2 foo bar baz" ]]
+    [[ "${lines[4]}" =~ "iteration 3" ]]
+    [[ "${lines[5]}" = "3 foo bar baz" ]]
+
+}
+
+@test "clink prints a beer mug" {
+    
+    local mug=$'\U1F37B'
+    run clink
+    [[ $output = $mug ]]
+
+}

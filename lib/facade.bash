@@ -178,7 +178,7 @@ useLimma() {
 
         log "Starting Limma Voom Analysis"
         
-        IFS=$'\n'
+        local IFS=$'\n'
         local group1CountsArray=($(for file in "${group1[@]}"; do basename "$file"| sed -e "s,.*,$__results_directory/counts/&.count.txt\n,"; done;))
         local group2CountsArray=($(for file in "${group2[@]}"; do basename "$file"| sed -e "s,.*,$__results_directory/counts/&.count.txt\n,"; done;))
         unset IFS
