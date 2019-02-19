@@ -1,5 +1,4 @@
 outputDirectory=
-workflowFile=
 referenceGenome=
 featureAnnotationsFile=
 goAnnotationsFile=

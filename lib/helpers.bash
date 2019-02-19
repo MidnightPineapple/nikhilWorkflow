@@ -66,3 +66,8 @@ load() {
         error "Unable to load $1"
     fi
 }
+
+cleanup() {
+    cd "$__wd"
+    unset __should_run
+}

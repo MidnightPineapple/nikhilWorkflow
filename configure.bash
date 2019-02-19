@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-need "__config_filepath"
+need "__config_filepath" "__workflow_filepath"
 
 if [[ -f "$__config_filepath" ]]; then
     source "$__config_filepath"
@@ -8,19 +8,23 @@ else
     error "Config file not found at $__config_filepath" 
 fi
 
-need "outputDirectory" "workflowFile"
+if [[ -f "$__workflow_filepath" ]]; then
+    __workflow_filepath="$(readlink -e "$__workflow_filepath")"
+else 
+    error "Workflow file not found at $__workflow_filepath"
+fi
+
+need "outputDirectory" 
 
 makeDirectoryIfNotExists "$outputDirectory"
-
 outputDirectory="$(readlink -e "$outputDirectory")"
-workflowFile="$(readlink -e "$workflowFile")"
 
 __log_file="$outputDirectory/log.txt"
 __results_directory="$outputDirectory/results"
 makeDirectoryIfNotExists "$__results_directory"
 
 IFS=$'\n'
-for line in $(awk '$0 ~ "^(depend|uses)" { print }' "$workflowFile"); do
+for line in $(awk '$0 ~ "^(depend|uses)" { print }' "$__workflow_filepath"); do
     unset IFS
     eval $line
     IFS=$'\n'
@@ -36,6 +40,4 @@ unset IFS
 groups=( "${group1[@]}" "${group2[@]}" )
 
 finalize 
-
 __configure=true
-

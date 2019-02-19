@@ -8,25 +8,38 @@ source "$__dirname/boot.bash"
 
 usage() {
     cat <<EOM
-Usage: $0 -c config_file [-g <config|slurm>] [-h]
+Usage: $0 -c config_file -w workflow_file [-g <config|slurm>] [-h]
 Options:
     -c config file path
+    -w workflow file path
     -g generates a slurm file or example config file for your workflow without running it
     -h this helpful message
 EOM
 }
 
-while getopts ":c:hd" opt; do
+while getopts ":c:hdg:w:" opt; do
     case "$opt" in
     c ) 
         __config_filepath="$OPTARG"
+        __c_flag=true
+        ;;
+    w ) 
+        __workflow_filepath="$OPTARG"
+        __w_flag=true
+        ;;
+    g ) 
+        log "Generate "$OPTARG" is not supported yet. Stay tuned."
+        __should_run=false
+        __g_flag=true
         ;;
     h ) 
-        usage 
+        usage
+        exit 0
         ;;
     d ) 
         log "Debugging: __should_run=false"
         __should_run=false
+        __d_flag=true
         ;;
     : )
         error "Invalid option: $OPTARG requires an argument"
@@ -38,22 +51,37 @@ while getopts ":c:hd" opt; do
     esac
 done; shift $((OPTIND-1))
 
+if [[ __d_flag = true ]]; then
+    return 0
+fi
+
+if [[ ! __c_flag = true ]]; then 
+    usage
+    error "Configuration file must be specified"
+fi
+
+if [[ ! __w_flag = true ]]; then
+    usage
+    error "Workflow file must be specified"
+fi
+
 source "$__dirname/configure.bash"
 
 cd "$outputDirectory"
 
 if [[ "$__should_run" = true ]]; then
-    if [[ -x "$workflowFile" ]]; then
-        log "Running workflow at $workflowFile"
+    if [[ -x "$__workflow_filepath" ]]; then
+        log "Running workflow at $__workflow_filepath"
         log "Logs will be written in $__log_file"
+        log "Results will be stored in $__results_directory"
         {
-            log "Starting Workflow at "$workflowFile""
-            source "$workflowFile" 
+            log "Starting Workflow at $__workflow_filepath"
+            source "$__workflow_filepath" 
             log "All Done! Cheers~" "$(clink)" 
         } &>> "$__log_file"
     else 
-        error "Executable workflow file not found at $workflowFile" 
+        error "Executable workflow file not found at $__workflow_filepath" 
     fi
 fi
 
-cd "$__wd"
+cleanup
