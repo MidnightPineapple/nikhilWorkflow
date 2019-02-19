@@ -1,6 +1,6 @@
 #! /usr/bin/env bats
 
-load ../boot
+load ../lib/helpers
 
 @test "log function prints a log" {
 
@@ -29,18 +29,24 @@ load ../boot
 
 }
 
-@test "joinby can join a list of parameters with some string" {
+@test "joinby can join a list of parameters with some char" {
 
-    run joinBy ";:;:" "wa" "ha" "ha"
-    [[ $output = "wa;:;:ha;:;:ha" ]]
+    run joinBy "," "wa" "ha" "ha"
+    [[ $output = "wa,ha,ha" ]]
+
+    run joinBy ":" "wa" "ha" "ha"
+    [[ $output = "wa:ha:ha" ]]
 
 }
 
-@test "joinby can join an array expansion with some string" {
+@test "joinby can join an array expansion with some char" {
 
     local arr=( "wa" "ha" "ha" )
-    run joinBy ";:;:" "${arr[@]}"    
-    [[ $output = "wa;:;:ha;:;:ha" ]]
+    run joinBy "," "${arr[@]}"    
+    [[ $output = "wa,ha,ha" ]]
+
+    run joinBy ":" "${arr[@]}"    
+    [[ $output = "wa:ha:ha" ]]
 
 }
 
