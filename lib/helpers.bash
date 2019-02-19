@@ -77,7 +77,7 @@ checkExecution() {
     if [[ "$code" -eq 0 ]]; then 
         log "$processName successful. $successMessage"
     else 
-        error "$processName failed. $errorMessage"
+        error "$processName failed. Halting Execution. $errorMessage"
     fi
 
 }
