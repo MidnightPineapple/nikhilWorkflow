@@ -90,4 +90,4 @@ if [[ "$__should_run" = true ]]; then
     fi
 fi
 
-cleanup
+cd "$__wd"

@@ -13,7 +13,7 @@ usePretrim() {
         iFastqc                                       \
         "$currentFilePath"                            \
         --outdir="$__results_directory"/preTrimQC/    ;
-        log "Finished PretrimQC for $currentFile"
+        checkExecution "$0" "Finished PretrimQC for $currentFile"
     }
 }
 
@@ -31,7 +31,7 @@ useTrim() {
         "$currentFilePath"                                      \
         "$__results_directory/trim/$currentFile.trim"           \
         HEADCROP:13                                             ;
-        log "Finished Trim for $currentFile"
+        checkExecution "$0" "Finished Trim for $currentFile"
     }
 }
 
@@ -47,7 +47,7 @@ usePosttrim() {
         iFastqc                                         \
         "$__results_directory/trim/$currentFile.trim"   \
         --outdir="$__results_directory"/postTrimQC/     ;
-        log "Finished PosttrimQC for $currentFile"
+        checkExecution "$0" "Finished PosttrimQC for $currentFile"
     }
 }
 
@@ -64,9 +64,10 @@ useGenerateStarGenome() {
         --genomeFastaFiles "$referenceGenome"       \
         --genomeDir "$outputDirectory/StarGenome"   \
         --sjdbGTFfile "$featureAnnotationsFile"     ;
-        log "Finished STAR genomeGenerate"
+        checkExecution "$0" "Finished STAR genomeGenerate"
 
         starGenome="$outputDirectory/StarGenome"
+
     }
     #    --sjdbOverhang 33                       ;
 }
@@ -87,7 +88,7 @@ useStar1() {
         --readFilesIn "$__results_directory/trim/$currentFile.trim"             \
         --outFileNamePrefix "$__results_directory/STARp1/$currentFile.trim."    \
         --outSAMtype BAM Unsorted                                               ;
-        log "Finished STAR first pass for $currentFile"
+        checkExecution "$0" "Finished STAR first pass for $currentFile"
     }
 }
 
@@ -121,7 +122,7 @@ useStar2() {
         --sjdbFileChrStartEnd ${sjdbFiles[@]}                                   \
         --sjdbGTFfile "$featureAnnotationsFile"                                 \
         --outFilterType BySJout                                                 ;
-        log "Finished STAR second pass for $currentFile"
+        checkExecution "$0" "Finished STAR second pass for $currentFile"
     }
 }
 
@@ -141,7 +142,7 @@ useRemoveDuplicates() {
         M="$__results_directory"/bam_drem/$currentFile.metrics.txt                          \
         REMOVE_DUPLICATES=true                                                  \
         CREATE_INDEX=true                                                       ;
-        log "Finished removing duplicates for $currentFile"
+        checkExecution "$0" "Finished removing duplicates for $currentFile"
     }
 }
 
@@ -163,7 +164,7 @@ useCountGenes() {
         -a "$featureAnnotationsFile"                \
         -o "$__results_directory"/counts/$currentFile.count.txt    \
         "$__results_directory"/bam_drem/$currentFile.bam           ;
-        log "Finished counting features for $currentFile"
+        checkExecution "$0" "Finished counting features for $currentFile"
     }
 }
 
@@ -188,7 +189,7 @@ useLimma() {
 
         iRscript "$__dirname"/scripts/limmavoom.R "$__results_directory/voom" "$group1Counts" "$group2Counts" "$goAnnotationsFile" "$group1Name" "$group2Name"
         
-        log "Final results in $__results_directory/voom"
+        checkExecution "$0" "Final results in $__results_directory/voom"
 
     }
 }

@@ -83,3 +83,31 @@ load ../lib/helpers
     [[ $output = $mug ]]
 
 }
+
+@test "checkExecution prints success message if \$?=0" {
+    
+    
+    run checkExecution "check" "It worked" "Wut"
+    
+    [[ $status -eq 0 ]]
+    [[ $output =~ "It worked" ]]
+    [[ $output =~ "LOG" ]]
+
+}
+
+@test "checkExecution prints error message if \$?=1" {
+
+    function failCheck() {
+        (exit 1)
+        checkExecution "check" "???" "It worked"
+    }
+
+    run failCheck
+    
+    [[ $status -ne 0 ]]
+    [[ $output =~ "It worked" ]]
+    [[ $output =~ "ERROR" ]]
+
+    unset failCheck
+    
+}

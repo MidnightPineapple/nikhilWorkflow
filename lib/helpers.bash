@@ -67,7 +67,17 @@ load() {
     fi
 }
 
-cleanup() {
-    cd "$__wd"
-    unset __should_run
+checkExecution() {
+
+    local code="$?"
+    local processName="$1"
+    local successMessage="$2"
+    local errorMessage="$3"
+
+    if [[ "$code" -eq 0 ]]; then 
+        log "$processName successful. $successMessage"
+    else 
+        error "$processName failed. $errorMessage"
+    fi
+
 }
