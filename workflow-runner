@@ -4,6 +4,8 @@ __thispath="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null||echo $0)"
 __dirname="$(dirname "$__thispath")"
 __wd="$PWD"
 __should_run=true
+(return &>/dev/null) && __sourced=true || __sourced=false
+
 source "$__dirname/boot.bash"
 
 usage() {
@@ -37,7 +39,7 @@ while getopts ":c:hdg:w:" opt; do
         exit 0
         ;;
     d ) 
-        log "Debugging: __should_run=false"
+        log "Debugging: Facades and helpers have been loaded. Config and workflow have not."
         __should_run=false
         __d_flag=true
         ;;
@@ -52,8 +54,11 @@ while getopts ":c:hdg:w:" opt; do
 done; shift $((OPTIND-1))
 
 if [[ "$__d_flag" = true ]]; then
-    echo "hmmm"
-    return 0
+    if [[ "$__sourced" = true ]]; then
+        return
+    else
+        exit 0
+    fi
 fi
 
 if [[ ! "$__c_flag" = true ]]; then 
