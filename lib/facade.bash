@@ -156,7 +156,7 @@ useCountGenes() {
         local currentFile="$(basename $currentFilePath)"
         log "Counting features for $currentFile"
         iFeatureCounts                              \
-        -R                                          \
+        -R BAM                                      \
         -g gene_id                                  \
         -s 0                                        \
         -t exon                                     \
@@ -168,7 +168,7 @@ useCountGenes() {
 }
 
 useLimma() {
-    depend "goAnnotationsFile" "group1Name" "group2Name" "outputDirectory"
+    depend "goAnnotationsFile" "group1Name" "group2Name"
     limma() {
         need "group1" "group2"
 
@@ -178,8 +178,11 @@ useLimma() {
 
         log "Starting Limma Voom Analysis"
         
-        local group1CountsArray=($(for file in "${group1[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
-        local group2CountsArray=($(for file in "${group2[@]}"; do basename "$file"| sed -e "s,.*, $outputDirectory/$__results_directory/counts/&.count.txt,"; done;))
+        IFS=$'\n'
+        local group1CountsArray=($(for file in "${group1[@]}"; do basename "$file"| sed -e "s,.*,$__results_directory/counts/&.count.txt\n,"; done;))
+        local group2CountsArray=($(for file in "${group2[@]}"; do basename "$file"| sed -e "s,.*,$__results_directory/counts/&.count.txt\n,"; done;))
+        unset IFS
+
         local group1Counts=$(joinBy , "${group1CountsArray[@]}")
         local group2Counts=$(joinBy , "${group2CountsArray[@]}")
 
