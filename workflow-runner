@@ -51,16 +51,17 @@ while getopts ":c:hdg:w:" opt; do
     esac
 done; shift $((OPTIND-1))
 
-if [[ __d_flag = true ]]; then
+if [[ "$__d_flag" = true ]]; then
+    echo "hmmm"
     return 0
 fi
 
-if [[ ! __c_flag = true ]]; then 
+if [[ ! "$__c_flag" = true ]]; then 
     usage
     error "Configuration file must be specified"
 fi
 
-if [[ ! __w_flag = true ]]; then
+if [[ ! "$__w_flag" = true ]]; then
     usage
     error "Workflow file must be specified"
 fi
