@@ -5,6 +5,7 @@ __dirname="$(dirname "$__thispath")"
 __wd="$PWD"
 __should_run=true
 (return &>/dev/null) && __sourced=true || __sourced=false
+__num_threads=1
 
 source "$__dirname/boot.bash"
 
@@ -15,6 +16,7 @@ Options:
     -c config file path
     -w workflow file path
     -g generates a slurm file or example config file for your workflow without running it
+    -t number of threads; defaults to 1
     -h this helpful message
 EOM
 }
@@ -43,6 +45,9 @@ while getopts ":c:hdg:w:" opt; do
         __should_run=false
         __d_flag=true
         ;;
+    t ) 
+        __num_threads="$OPTARG"
+        __t_flag=true
     : )
         error "Invalid option: $OPTARG requires an argument"
         ;; 

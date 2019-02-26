@@ -28,6 +28,7 @@ useTrim() {
         log "Starting Trim SE HEADCROP:13 for $currentFile"
         iTrimmomatic                                            \
         SE                                                      \
+        -threads "$__num_threads"                               \
         "$currentFilePath"                                      \
         "$__results_directory/trim/$currentFile.trim"           \
         HEADCROP:13                                             ;
@@ -61,6 +62,7 @@ useGenerateStarGenome() {
         log "Starting STAR genomeGenerate"
         iStar                                       \
         --runMode genomeGenerate                    \
+        --runThreadN "$__num_threads"               \
         --genomeFastaFiles "$referenceGenome"       \
         --genomeDir "$outputDirectory/StarGenome"   \
         --sjdbGTFfile "$featureAnnotationsFile"     ;
@@ -83,6 +85,7 @@ useStar1() {
         local currentFile="$(basename $currentFilePath)"
         log "Starting STAR first pass for $currentFile"
         iStar                                                                   \
+        --runThreadN "$__num_threads"                                           \
         --genomeDir "$starGenome"                                               \
         --alignIntronMax 5000                                                   \
         --readFilesIn "$__results_directory/trim/$currentFile.trim"             \
@@ -112,6 +115,7 @@ useStar2() {
         warn "star2 may not work if there's a space in the file path to the sjdbFiles"
 
         iStar                                                                   \
+        --runThreadN "$__num_threads"                                           \
         --genomeDir "$starGenome"                                               \
         --alignIntronMax 5000                                                   \
         --readFilesIn "$__results_directory/trim/$currentFile.trim"             \
@@ -156,6 +160,7 @@ useCountGenes() {
         local currentFile="$(basename $currentFilePath)"
         log "Counting features for $currentFile"
         iFeatureCounts                              \
+        -T "$__num_threads"                         \
         -R BAM                                      \
         -g gene_id                                  \
         -s 0                                        \
