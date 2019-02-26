@@ -48,6 +48,7 @@ while getopts ":c:hdg:w:" opt; do
     t ) 
         __num_threads="$OPTARG"
         __t_flag=true
+        ;;
     : )
         error "Invalid option: $OPTARG requires an argument"
         ;; 

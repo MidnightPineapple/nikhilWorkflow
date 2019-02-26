@@ -53,22 +53,20 @@ usePosttrim() {
 }
 
 useGenerateStarGenome() {
-    depend "referenceGenome" "featureAnnotationsFile" "outputDirectory"
+    depend "referenceGenome" "featureAnnotationsFile" "outputDirectory" "starGenome"
     generateStarGenome() {
         load star
 
-        makeDirectoryIfNotExists "$outputDirectory/StarGenome"
+        makeDirectoryIfNotExists "$starGenome"
 
         log "Starting STAR genomeGenerate"
         iStar                                       \
         --runMode genomeGenerate                    \
         --runThreadN "$__num_threads"               \
         --genomeFastaFiles "$referenceGenome"       \
-        --genomeDir "$outputDirectory/StarGenome"   \
+        --genomeDir "$starGenome"                   \
         --sjdbGTFfile "$featureAnnotationsFile"     ;
-        checkExecution "${FUNCNAME[0]}" "Finished STAR genomeGenerate"
-
-        starGenome="$outputDirectory/StarGenome"
+        checkExecution "${FUNCNAME[0]}" "Generated STAR genome at $starGenome"
 
     }
     #    --sjdbOverhang 33                       ;
@@ -197,3 +195,23 @@ useLimma() {
 
     }
 }
+
+useMakeSalmonIndex() {
+    depend "referenceTranscriptome" "salmonIndex"
+    makeSalmonIndex() {
+        load salmon
+
+        makeDirectoryIfNotExists "$salmonIndex"
+
+        log "Generating salmon index at $salmonIndex"
+
+        iSalmon index                               \
+            -t "$referenceTranscriptome"            \
+            -i "$salmonIndex"                       \
+            --type quasi                            \
+            -k 21                                   ;
+
+        checkExecution "${FUNCNAME[0]}" "Finished generating salmon index at $salmonIndex"
+    }
+}
+

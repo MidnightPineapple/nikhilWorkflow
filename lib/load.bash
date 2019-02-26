@@ -2,7 +2,7 @@
 
 # A facade for the loading and aliasing of modules
 
-usageLoad() { echo "Usage: $0 {fastqc|trimmomatic|star|picard|featureCounts|r}"; }
+usageLoad() { echo "Usage: $0 {fastqc|trimmomatic|star|picard|featureCounts|r|salmon}"; }
 
 if [[ $# -ne 1 ]]; then 
     echo "Invalid arguments: $@"
@@ -36,6 +36,10 @@ feature[Cc]ounts)
     module load GNU/7.3.0-2.30  OpenMPI/3.1.1 R/3.5.1-X11-20180604
     iR() { R "$@" ; }
     iRscript() { Rscript --vanilla "$@" ; }
+    ;;
+salmon)
+    module load Salmon/0.11.3
+    iSalmon() { salmon "$@" }
     ;;
 *)
     usageLoad
