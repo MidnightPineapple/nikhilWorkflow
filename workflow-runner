@@ -21,7 +21,7 @@ Options:
 EOM
 }
 
-while getopts ":c:hdg:w:" opt; do
+while getopts ":c:hdg:w:t:" opt; do
     case "$opt" in
     c ) 
         __config_filepath="$OPTARG"
