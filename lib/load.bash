@@ -39,7 +39,7 @@ feature[Cc]ounts)
     ;;
 salmon)
     module load Salmon/0.11.3
-    iSalmon() { salmon "$@" }
+    iSalmon() { salmon "$@" ; }
     ;;
 *)
     usageLoad
