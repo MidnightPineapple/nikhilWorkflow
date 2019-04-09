@@ -19,7 +19,7 @@ need "outputDirectory"
 makeDirectoryIfNotExists "$outputDirectory"
 outputDirectory="$(readlink -e "$outputDirectory")"
 
-__log_file="$outputDirectory/log.out"
+__log_file="$outputDirectory/log-$!.out"
 __results_directory="$outputDirectory/results"
 makeDirectoryIfNotExists "$__results_directory"
 
